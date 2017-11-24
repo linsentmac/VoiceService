@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">lasf-test</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_edit_able_param">参数测试</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_auto_test">全功能自动测试</string>
+    <string name="contacts">联系人</string>
+    <string name="app">应用</string>
+    <string name="vod">视频</string>
+    <string name="was">网站</string>
+
+</resources>

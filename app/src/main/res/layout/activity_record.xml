@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="com.lenovo.smartcastvoice.activity.RecordActivity">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/ball_gif"
+        android:layout_width="@dimen/x380"
+        android:layout_height="@dimen/x380"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/x4"
+        android:background="@mipmap/keywest_ball_2"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/x64"
+        android:text="@string/speek_hint"
+        android:textSize="@dimen/x16"
+        android:textColor="@color/speek_hint"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
