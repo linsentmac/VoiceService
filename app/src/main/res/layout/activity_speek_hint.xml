@@ -40,5 +40,46 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/x137"
         android:src="@mipmap/mic"/>
-    
+
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="@dimen/x280"
+        android:layout_height="wrap_content"
+        android:autoStart="true"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true"
+        android:flipInterval="3000"
+        android:inAnimation="@anim/flipper_anim_in"
+        android:outAnimation="@anim/flipper_anim_out"
+        >
+
+    </ViewFlipper>
+
+    <RelativeLayout
+        android:id="@+id/result_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/result_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/x20"
+            android:text="Result"/>
+
+        <TextView
+            android:id="@+id/result_tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/result_tv"
+            android:layout_centerHorizontal="true"
+            android:text="Result_Hint"
+            android:layout_marginTop="@dimen/x15"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>

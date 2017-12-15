@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.lenovo.smartcastvoice.BuildConfig;
 import com.lenovo.smartcastvoice.jsonbean.DomainBean;
+import com.lenovo.smartcastvoice.jsonbean.WeatherBean;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -160,7 +161,7 @@ public class AppClient {
          * @return
          */
         @GET("?")
-        Call<DomainBean> getDomainBean(@Query("sentence") String sentence, @Query("userid") int userid);
+        Call<WeatherBean> getDomainBean(@Query("sentence") String sentence, @Query("userid") int userid, @Query("city") String city);
 
 
     }

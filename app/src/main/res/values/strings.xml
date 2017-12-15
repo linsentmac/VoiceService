@@ -11,4 +11,6 @@
     <string name="speek_hint">请说吧,我在听...</string>
     <string name="ask_hint">你可以这样问我</string>
 
+    <string name="weather_answer">上海今天晴天,东风3级,适合外出游玩</string>
+
 </resources>

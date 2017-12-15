@@ -6,19 +6,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lenovo.smartcastvoice.jsonbean.DomainBean;
 import com.lenovo.smartcastvoice.R;
 import com.lenovo.smartcastvoice.httpRequest.AppClient;
+import com.lenovo.smartcastvoice.jsonbean.WeatherBean;
+import com.lenovo.smartcastvoice.jsonbean.WeekWeatherBean;
 import com.lenovo.smartcastvoice.utils.PackageManager;
 import com.lenovo.smartcastvoice.utils.StatusBarUtils;
+import com.lenovo.smartcastvoice.view.SeismicWave;
 import com.lenovo.smartcastvoice.voice_manager.TTStoSpeech;
 import com.lenovo.smartcastvoice.voice_manager.VoiceManager;
 import com.lenovo.smartcastvoice.voice_manager.VoiceRecognitionListener;
 
 import java.io.IOException;
+import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -33,9 +40,11 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
     private GifImageView gifImageView;
     private static final int STOP_RECORD = 0;
     private static final int STOP_DELAY = 10 * 1000;
+    private static final int RECORD_SUCCESS = 1;
     private PackageManager packageManager;
     private TTStoSpeech ttStoSpeech;
     private VoiceManager voiceManager;
+    private SeismicWave seismicWave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +81,8 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
     }
 
     private void initViews() {
+        seismicWave = findViewById(R.id.seismicwave);
+        seismicWave.reStart().start();
         gifImageView = findViewById(R.id.ball_gif);
         //record_ball = findViewById(R.id.record_ball_gif);
         //Glide.with(this).load(R.mipmap.keywest_ball_1).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(record_ball);
@@ -88,14 +99,27 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
                     startActivity(new Intent(RecordActivity.this, SpeekHintActivity.class));
                     finish();
                     break;
+                case RECORD_SUCCESS:
+                    String result = (String) msg.obj;
+                    dealWithRecResult(result);
+                    break;
             }
         }
     };
 
     @Override
-    public void asrSuccess(String result) {
+    public void asrSuccess(final String result) {
         mHandler.removeMessages(STOP_RECORD);
         Log.d(TAG, "result = " + result);
+        seismicWave.setVisibility(View.GONE);
+        gifImageView.setVisibility(View.VISIBLE);
+        Message msg = new Message();
+        msg.what = RECORD_SUCCESS;
+        msg.obj = result;
+        mHandler.sendMessageDelayed(msg, 2200);
+    }
+
+    private void dealWithRecResult(final String result){
         if(result.contains("打开")){
             String app=result.replace("打开", "");
             Log.i("打开", app);
@@ -107,23 +131,45 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
             AppClient.ApiStores apiStores = AppClient.retrofit(url).create(AppClient.ApiStores.class);
             /*RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                     new Gson().toJson(new Enity("30921")));*/
-            Call<DomainBean> call = apiStores.getDomainBean(result, 55);
-            call.enqueue(new Callback<DomainBean>() {
+            Call<WeatherBean> call = apiStores.getDomainBean(result, 55, "安徽合肥");
+            call.enqueue(new Callback<WeatherBean>() {
                 @Override
-                public void onResponse(Call<DomainBean> call, Response<DomainBean> response) {
+                public void onResponse(Call<WeatherBean> call, Response<WeatherBean> response) {
                     String reply = response.body().getReply();
+                    String domain = response.body().getDomain();
                     Log.i(TAG, "Request Info :" + reply);
+                    String weekWeather = response.body().getIntent().get(0).get未来7天天气();
+                    Log.i(TAG, "weekWeather Info :" + weekWeather);
+                    Gson gson = new Gson();
+                    List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>(){}.getType());
+                    Log.i(TAG, "weekWeather weather :" + weekList.get(0).getWeather());
+                    if(reply == null || reply.trim() == null){
+                        startHintActivity(result);
+                        return;
+                    }
+                    if(domain.equals("天气")){
+                        Intent intent = new Intent(RecordActivity.this, WeatherActivity.class);
+                        intent.putExtra("result", result);
+                        intent.putExtra("reply", reply);
+                        startActivity(intent);
+                    }
                     ttStoSpeech.speek(reply);
                 }
 
                 @Override
-                public void onFailure(Call<DomainBean> call, Throwable t) {
+                public void onFailure(Call<WeatherBean> call, Throwable t) {
                     Log.d(TAG, "onFailure = " + t.getMessage());
+                    startHintActivity(result);
                 }
             });
-
-
         }
+    }
+
+    private void startHintActivity(String result){
+        Intent intent = new Intent(RecordActivity.this, SpeekHintActivity.class);
+        intent.putExtra("isResult", true);
+        intent.putExtra("Result", result);
+        startActivity(intent);
     }
 
     @Override

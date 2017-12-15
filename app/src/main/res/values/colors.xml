@@ -8,4 +8,6 @@
 
     <color name="speek_hint">#83bdff</color>
 
+    <color name="weather_answer">#83bdff</color>
+
 </resources>

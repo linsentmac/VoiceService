@@ -66,33 +66,6 @@ public class VoiceManager {
         r.startListening(recognizerIntent);
     }
 
-    private void startWakeUp(){
-        ComponentName com = new ComponentName("com.lenovo.lasf",
-                "com.lenovo.lasf.speech.LasfService");
-        SpeechRecognizer r = SpeechRecognizer.createSpeechRecognizer(mContext, com);
-        r.setRecognitionListener(mReListener);
-        Intent recognizerIntent = new Intent();
-
-        recognizerIntent.putExtra("<main>", "你好联想");
-
-        /*recognizerIntent.putExtra("<main>", new String[] { "呼叫<name>",
-                "<name>", "打电话给<name>","打开<apps>","<apps>","<was>网","<was>","<vod>","你好联想" });
-
-        recognizerIntent.putExtra("<name>", names);
-        recognizerIntent.putExtra("<apps>", apps);
-        recognizerIntent.putExtra("<was>", new String[]{"百度","新浪","人人","网易"});
-        recognizerIntent.putExtra("<vod>", new String[]{"小时代","功夫","致我们终将逝去的青春","霍比特人"});
-
-
-
-        // recognizerIntent.putExtra("<place>", new String[] { "上地", "联想" }); ,
-        // "从<place>到<place>怎么走"
-
-        recognizerIntent.putExtra("speech_domain", "all"); // 识别联系人领域*/
-
-        r.startListening(recognizerIntent);
-    }
-
 
     public void startRecognition() {
         long time1 = System.currentTimeMillis();
@@ -106,14 +79,14 @@ public class VoiceManager {
         r = SpeechRecognizer.createSpeechRecognizer(mContext, com);
         r.setRecognitionListener(mReListener);
         Intent recognizerIntent = new Intent();
-        recognizerIntent.putExtra("<main>", new String[] { "呼叫<name>",
-                "<name>", "打电话给<name>","打开<apps>","<apps>","<was>网","<was>","<vod>","你好联想" });
+        /*recognizerIntent.putExtra("<main>", new String[] { "呼叫<name>",
+                "<name>", "打电话给<name>","打开<apps>","<apps>","<was>网","<was>","<vod>","你好联想","天气" });
 
         recognizerIntent.putExtra("<name>", names);
         recognizerIntent.putExtra("<apps>", apps);
         recognizerIntent.putExtra("<was>", new String[]{"百度","新浪","人人","网易"});
         recognizerIntent.putExtra("<vod>", new String[]{"小时代","功夫","致我们终将逝去的青春","霍比特人"});
-
+*/
 
 
         // recognizerIntent.putExtra("<place>", new String[] { "上地", "联想" }); ,
@@ -389,6 +362,7 @@ public class VoiceManager {
         }
         apps = new String[app.size()];
         for (int i = 0, j = app.size(); i < j; i++) {
+            Log.d(TAG, "app name = " + app.get(i));
             apps[i] = app.get(i);
         }
 //		Log.i("本机程序", ""+apps.toString());

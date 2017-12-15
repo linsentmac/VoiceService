@@ -1,5 +1,6 @@
 package com.lenovo.smartcastvoice.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -64,6 +65,7 @@ public class PackageManager {
         Intent intent = new Intent();
         intent =packageManager.getLaunchIntentForPackage(packageName);
         mContext.startActivity(intent);
+        ((Activity)mContext).finish();
     }
 
 }
