@@ -7,6 +7,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.util.Log;
 
+import com.lenovo.smartcastvoice.activity.RecordActivity;
+import com.lenovo.smartcastvoice.activity.SpeekHintActivity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +25,7 @@ public class PackageManager {
     private Context mContext;
     static Map<String,String> appinfo;
     private String apps[];
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
 
 
     public PackageManager(Context context){
@@ -41,7 +44,7 @@ public class PackageManager {
 
             PackageInfo packageInfo = packages.get(j);
             //显示非系统软件
-            if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)==0){
+            //if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)==0){
                 map.put("img", packageInfo.applicationInfo.loadIcon(mContext.getPackageManager()).getCurrent());
                 map.put("name", packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString());
                 app.add(packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString());
@@ -51,8 +54,9 @@ public class PackageManager {
                 if(DEBUG) Log.i(TAG, packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString()+packageInfo.packageName);
                 map.put("desc", packageInfo.packageName);
                 listMap.add(map);
-            }
+            //}
         }
+        Log.d(TAG, "appinfo = " + appinfo);
         apps = new String[app.size()];
         for (int i = 0, j = app.size(); i < j; i++) {
             apps[i] = app.get(i);
@@ -60,12 +64,26 @@ public class PackageManager {
     }
 
     public void openApp(String appName) {
+        Log.d(TAG, "appName = " + appName + "appinfo = " + appinfo);
         String packageName = appinfo.get(appName.trim());
-        android.content.pm.PackageManager packageManager = mContext.getPackageManager();
-        Intent intent = new Intent();
-        intent =packageManager.getLaunchIntentForPackage(packageName);
-        mContext.startActivity(intent);
-        ((Activity)mContext).finish();
+        Log.d(TAG, "packageName = " + packageName);
+        if(packageName != null){
+            android.content.pm.PackageManager packageManager = mContext.getPackageManager();
+            Intent intent = new Intent();
+            intent =packageManager.getLaunchIntentForPackage(packageName);
+            mContext.startActivity(intent);
+            ((Activity)mContext).finish();
+        }else {
+            Intent intent = new Intent(mContext, SpeekHintActivity.class);
+            intent.putExtra("isResult", true);
+            intent.putExtra("Result", "");
+            mContext.startActivity(intent);
+        }
+
+    }
+
+    public String[] getAppinfo(){
+        return apps;
     }
 
 }

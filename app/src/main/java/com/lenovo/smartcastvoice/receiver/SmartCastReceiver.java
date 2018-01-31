@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.lenovo.smartcastvoice.LocationService;
 import com.lenovo.smartcastvoice.VoiceService;
 
 /**
@@ -23,6 +24,10 @@ public class SmartCastReceiver extends BroadcastReceiver {
             Intent serviceIntent = new Intent(context, VoiceService.class);
             serviceIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             context.startService(serviceIntent);
+
+            Intent locationIntent = new Intent(context, LocationService.class);
+            locationIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            context.startActivity(locationIntent);
         }
     }
 }

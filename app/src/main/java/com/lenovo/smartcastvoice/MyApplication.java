@@ -14,6 +14,7 @@ import java.util.Map;
 public class MyApplication extends Application {
 
     private static WeatherBean mWeatherBean;
+    private static String mWeekWeather;
 
     @Override
     public void onCreate() {
@@ -27,6 +28,14 @@ public class MyApplication extends Application {
 
     public static WeatherBean getWeatherBean(){
         return mWeatherBean;
+    }
+
+    public static void setWeekWeather(String weekWeather){
+        mWeekWeather = weekWeather;
+    }
+
+    public static String getmWeekWeather(){
+        return mWeekWeather;
     }
 
 }

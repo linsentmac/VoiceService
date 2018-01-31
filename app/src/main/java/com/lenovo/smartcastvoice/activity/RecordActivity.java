@@ -12,9 +12,11 @@ import android.widget.MediaController;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lenovo.smartcastvoice.MyApplication;
 import com.lenovo.smartcastvoice.jsonbean.DomainBean;
 import com.lenovo.smartcastvoice.R;
 import com.lenovo.smartcastvoice.httpRequest.AppClient;
+import com.lenovo.smartcastvoice.jsonbean.HourWeatherBean;
 import com.lenovo.smartcastvoice.jsonbean.WeatherBean;
 import com.lenovo.smartcastvoice.jsonbean.WeekWeatherBean;
 import com.lenovo.smartcastvoice.utils.PackageManager;
@@ -58,7 +60,7 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
         packageManager = new PackageManager(this);
         ttStoSpeech = new TTStoSpeech(this);
         voiceManager = new VoiceManager(this, this);
-        voiceManager.startRecognition();
+        voiceManager.startRecognition(packageManager.getAppinfo());
         mHandler.sendEmptyMessageDelayed(STOP_RECORD, STOP_DELAY);
 
     }
@@ -116,7 +118,7 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
         Message msg = new Message();
         msg.what = RECORD_SUCCESS;
         msg.obj = result;
-        mHandler.sendMessageDelayed(msg, 2200);
+        mHandler.sendMessageDelayed(msg, 0);
     }
 
     private void dealWithRecResult(final String result){
@@ -131,26 +133,29 @@ public class RecordActivity extends Activity implements VoiceRecognitionListener
             AppClient.ApiStores apiStores = AppClient.retrofit(url).create(AppClient.ApiStores.class);
             /*RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
                     new Gson().toJson(new Enity("30921")));*/
-            Call<WeatherBean> call = apiStores.getDomainBean(result, 55, "安徽合肥");
+            Call<WeatherBean> call = apiStores.getDomainBean(result, 55, "上海上海");
             call.enqueue(new Callback<WeatherBean>() {
                 @Override
                 public void onResponse(Call<WeatherBean> call, Response<WeatherBean> response) {
                     String reply = response.body().getReply();
                     String domain = response.body().getDomain();
                     Log.i(TAG, "Request Info :" + reply);
-                    String weekWeather = response.body().getIntent().get(0).get未来7天天气();
-                    Log.i(TAG, "weekWeather Info :" + weekWeather);
-                    Gson gson = new Gson();
-                    List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>(){}.getType());
-                    Log.i(TAG, "weekWeather weather :" + weekList.get(0).getWeather());
-                    if(reply == null || reply.trim() == null){
+                    if(reply == null || reply.equals("") || reply.trim() == null){
                         startHintActivity(result);
                         return;
                     }
+                    String weekWeather = response.body().getIntent().get(0).get未来7天天气();
+                    MyApplication.setWeekWeather(weekWeather);
+                    Log.i(TAG, "weekWeather Info :" + weekWeather);
+                    Gson gson = new Gson();
+                    List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>(){}.getType());
+                    //Log.i(TAG, "weekWeather weather :" + weekList.get(0).getWeather());
+
                     if(domain.equals("天气")){
                         Intent intent = new Intent(RecordActivity.this, WeatherActivity.class);
                         intent.putExtra("result", result);
                         intent.putExtra("reply", reply);
+                        //intent.putExtra("weekWeather", weekWeather);
                         startActivity(intent);
                     }
                     ttStoSpeech.speek(reply);

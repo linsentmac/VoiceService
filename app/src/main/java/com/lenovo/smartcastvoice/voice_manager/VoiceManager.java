@@ -67,11 +67,13 @@ public class VoiceManager {
     }
 
 
-    public void startRecognition() {
+    public void startRecognition(String[] apps) {
         long time1 = System.currentTimeMillis();
 
-        readAllContacts();		//获取本机联系人
-        getInstalledApps();		//获取本机程序
+        //readAllContacts();		//获取本机联系人
+        if(apps.length == 0){
+            getInstalledApps();		//获取本机程序
+        }
 
         Log.i("读取联系人时间", "" + (System.currentTimeMillis() - time1));
         ComponentName com = new ComponentName("com.lenovo.lasf",
@@ -79,14 +81,10 @@ public class VoiceManager {
         r = SpeechRecognizer.createSpeechRecognizer(mContext, com);
         r.setRecognitionListener(mReListener);
         Intent recognizerIntent = new Intent();
-        /*recognizerIntent.putExtra("<main>", new String[] { "呼叫<name>",
-                "<name>", "打电话给<name>","打开<apps>","<apps>","<was>网","<was>","<vod>","你好联想","天气" });
-
-        recognizerIntent.putExtra("<name>", names);
+        recognizerIntent.putExtra("<app>", new String[] { "打开<apps>","<apps>"});
         recognizerIntent.putExtra("<apps>", apps);
-        recognizerIntent.putExtra("<was>", new String[]{"百度","新浪","人人","网易"});
-        recognizerIntent.putExtra("<vod>", new String[]{"小时代","功夫","致我们终将逝去的青春","霍比特人"});
-*/
+        //recognizerIntent.putExtra("<was>", new String[]{"百度","新浪","人人","网易"});
+        //recognizerIntent.putExtra("<vod>", new String[]{"小时代","功夫","致我们终将逝去的青春","霍比特人"});
 
 
         // recognizerIntent.putExtra("<place>", new String[] { "上地", "联想" }); ,
@@ -135,7 +133,7 @@ public class VoiceManager {
                     .getStringArrayList("results_recognition");
             String jo = results.getString("nlp_result_origin");
 
-            Log.i("返回结果", "" + rr.size() + jo + list);
+            Log.i("返回结果", "" + rr.size() + "\n" + jo + "\n" + list);
 
             if (rr.size() > 0) {
                 StringBuffer tt = new StringBuffer();
@@ -144,7 +142,8 @@ public class VoiceManager {
                     Log.i("tt", tt.toString());
                 }
 
-                final String t = tt.toString();
+                //final String t = tt.toString();
+                final String t = rr.get(0);
                 endtime = System.currentTimeMillis();
 
                 mListenr.asrSuccess(t);
@@ -348,7 +347,7 @@ public class VoiceManager {
 
             PackageInfo packageInfo = packages.get(j);
             //显示非系统软件
-            if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)==0){
+            //if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)==0){
                 map.put("img", packageInfo.applicationInfo.loadIcon(mContext.getPackageManager()).getCurrent());
                 map.put("name", packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString());
                 app.add(packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString());
@@ -358,7 +357,7 @@ public class VoiceManager {
                 Log.i("chengxu", packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString()+packageInfo.packageName);
                 map.put("desc", packageInfo.packageName);
                 listMap.add(map);
-            }
+            //}
         }
         apps = new String[app.size()];
         for (int i = 0, j = app.size(); i < j; i++) {

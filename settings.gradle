@@ -1,1 +1,1 @@
-include ':app',':levoice'
+include ':app', ':levoiceservice', ':bdvoiceservice'
