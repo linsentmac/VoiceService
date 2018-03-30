@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="home_gray">#CCCCCC</color>
+
+    <color name="speek_hint">#83bdff</color>
+
+    <color name="weather_answer">#83bdff</color>
+
 </resources>

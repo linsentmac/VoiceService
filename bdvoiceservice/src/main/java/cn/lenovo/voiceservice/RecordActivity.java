@@ -1,23 +1,22 @@
 package cn.lenovo.voiceservice;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
 import android.os.PowerManager;
-import android.provider.ContactsContract;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.baidu.speech.VoiceRecognitionService;
 import com.google.gson.Gson;
@@ -33,118 +32,126 @@ import java.util.TimerTask;
 import cn.lenovo.voiceservice.httpRequest.AppClient;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.jsonbean.WeekWeatherBean;
+import cn.lenovo.voiceservice.utils.StatusBarUtils;
+import cn.lenovo.voiceservice.view.SeismicWave;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by linsen on 18-1-25.
- */
+public class RecordActivity extends Activity {
 
-public class SCVoiceService extends Service {
-
-    private static final String TAG = "SC-VoiceService";
+    private static final String TAG = "SC-RecordActivity";
+    private ImageView record_ball;
+    private GifImageView gifImageView;
+    private TTStoSpeech ttStoSpeech;
+    private SeismicWave seismicWave;
+    private SpeechRecognizer r;
 
     private static final boolean SEND_CAST = false;
     private final String VOICE_ACTION = "cn.lenovo.voiceservice.VOICE_SERVICE";
     private final String VOICE_EXTRA = "VOCON_RESULT";
 
-    static Map<String,String> appinfo = new HashMap<String, String>();
-    long begintime, endtime;
-    String names[];
-    String apps[];
-    private SpeechRecognizer r;
-    private TTStoSpeech ttStoSpeech;
-    private boolean isFirstLoad;
-    private final String LENOVO_HOME_PACKAGE = "com.turing.tlpa";
     private Timer timer;
     private ActivityManager manager;
+    private final String LENOVO_HOME_PACKAGE = "com.turing.tlpa";
 
     private final long DELAY = 1000;
     private final long PERIOD = 2000;
 
+    static Map<String, String> appinfo = new HashMap<String, String>();
+    long begintime, endtime;
+    String names[];
+    String apps[];
+
     @Override
-    public void onCreate() {
-        super.onCreate();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_record);
+        StatusBarUtils.hideNavgationBar(this);
+        Log.d(TAG, "onCreate");
+        initViews();
+        //initEvents();
+        getInstalledApps();
+        initRecognition(apps);
+
         ttStoSpeech = new TTStoSpeech(this);
         manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         timer = new Timer(true);
         timer.schedule(task, DELAY, PERIOD);
         Log.d(TAG, "onCreate ===== ");
+        requestPower();
+
+    }
+
+    public void requestPower() {
+        //判断是否已经赋予权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                //这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
+            } else {
+                Log.d(TAG, "request permission ..... ");
+                //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+            }
+        } else {
+            Log.d(TAG, "hava permission ..... ");
+        }
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand ===== ");
-        if(wakeLock != null){
+    protected void onResume() {
+        super.onResume();
+        if (wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
         }
-        if(apps == null || apps.length == 0){
-            getInstalledApps();		//获取本机程序
+        if (apps == null || apps.length == 0) {
+            getInstalledApps();        //获取本机程序
         }
         startRecognition(apps);
-        //ttStoSpeech.speek("请说");
-        //mHandler.sendEmptyMessageDelayed(0, 400);
-
-
-        return super.onStartCommand(intent, flags, startId);
     }
 
+    private Intent recognizerIntent;
 
-    private TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            List<ActivityManager.RunningTaskInfo> runningTask = manager.getRunningTasks(1);
-            ActivityManager.RunningTaskInfo runningTaskInfo = runningTask.get(0);
-            String packageName = runningTaskInfo.topActivity.getPackageName();
-            Log.d(TAG, "packageName" + packageName);
-            if(packageName.equals(LENOVO_HOME_PACKAGE)){
-                stopSelf();
-            }
+    private void initRecognition(String[] apps) {
+        long time1 = System.currentTimeMillis();
+
+        //readAllContacts();		//获取本机联系人
+        if (apps == null || apps.length == 0) {
+            getInstalledApps();        //获取本机程序
         }
-    };
 
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-        }
-    };
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-
-
-    /**
-     * 开启一次识别任务
-     */
-    private void start() {
-        ComponentName com = new ComponentName("com.lenovo.lasf",
-                "com.lenovo.lasf.speech.LasfService");
-        SpeechRecognizer r = SpeechRecognizer.createSpeechRecognizer(this, com);
+        Log.i(TAG, "" + (System.currentTimeMillis() - time1));
+        ComponentName com = new ComponentName(this,
+                VoiceRecognitionService.class);
+        r = SpeechRecognizer.createSpeechRecognizer(this, com);
         r.setRecognitionListener(mReListener);
-        Intent recognizerIntent = new Intent();
-        // recognizerIntent.putExtra("<main>", new String[] { "呼叫<name>",
-        // "打电话给<name>" });
-        // recognizerIntent.putExtra("<name>", new String[] { "王小虎", "王晓虎" });
+        recognizerIntent = new Intent();
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_START, R.raw.bdspeech_recognition_start);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_END, R.raw.bdspeech_speech_end);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_SUCCESS, R.raw.bdspeech_recognition_success);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_ERROR, R.raw.bdspeech_recognition_error);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_CANCEL, R.raw.bdspeech_recognition_cancel);
+
+        recognizerIntent.putExtra("<app>", new String[]{"打开<apps>", "<apps>"});
+        recognizerIntent.putExtra("<apps>", apps);
+        recognizerIntent.putExtra("<screen>", new String[]{"打开投影", "关闭投影"});
+        recognizerIntent.putExtra("<calibration>", new String[]{"重新校准"});
+        //recognizerIntent.putExtra("<was>", new String[]{"百度","新浪","人人","网易"});
+        //recognizerIntent.putExtra("<vod>", new String[]{"小时代","功夫","致我们终将逝去的青春","霍比特人"});
+
+
         // recognizerIntent.putExtra("<place>", new String[] { "上地", "联想" }); ,
         // "从<place>到<place>怎么走"
-        recognizerIntent.putExtra("speech_sce", "cmd");
-        recognizerIntent.putExtra("speech_domain", "all"); // 识别联系人领域
 
-        r.startListening(recognizerIntent);
+        recognizerIntent.putExtra("speech_domain", "all"); // 识别联系人领域
     }
 
 
     public void startRecognition(String[] apps) {
-        long time1 = System.currentTimeMillis();
+        /*long time1 = System.currentTimeMillis();
 
         //readAllContacts();		//获取本机联系人
         if(apps == null || apps.length == 0){
@@ -174,18 +181,13 @@ public class SCVoiceService extends Service {
         // recognizerIntent.putExtra("<place>", new String[] { "上地", "联想" }); ,
         // "从<place>到<place>怎么走"
 
-        recognizerIntent.putExtra("speech_domain", "all"); // 识别联系人领域
-        r.startListening(recognizerIntent);
+        recognizerIntent.putExtra("speech_domain", "all"); // 识别联系人领域*/
+        if (r != null) {
+            r.startListening(recognizerIntent);
+        }
+
     }
 
-    public void stopRecognition(){
-        if(r != null){
-            Log.d(TAG, "stopRecognition");
-            //r.stopListening();
-            //r.cancel();
-            r.destroy();
-        }
-    }
 
     private RecognitionListener mReListener = new RecognitionListener() {
 
@@ -218,41 +220,41 @@ public class SCVoiceService extends Service {
                 final String t = rr.get(0);
                 endtime = System.currentTimeMillis();
 
-                if(SEND_CAST){
+                if (SEND_CAST) {
                     Intent broadcastIntent = new Intent(VOICE_ACTION);
                     broadcastIntent.putExtra(VOICE_EXTRA, t);
                     sendBroadcast(broadcastIntent);
                 }
 
-                if(t.contains("打开投影")){
+                if (t.contains("打开投影")) {
                     wakeUp();
                     /*Intent intent = new Intent("android.intent.action.ACTION_PICO_ON");
                     sendBroadcast(intent);*/
                     return;
                 }
 
-                if(t.contains("关闭投影")){
+                if (t.contains("关闭投影")) {
                     Intent intent = new Intent("android.intent.action.ACTION_PICO_OFF");
                     sendBroadcast(intent);
                     return;
                 }
 
-                if(t.contains("重新校准")){
+                if (t.contains("重新校准")) {
                     Intent intent = new Intent("com.android.gscalibration.RESTART");
                     sendBroadcast(intent);
                     return;
                 }
 
 
-                if(t.contains("打开")){
-                    String app=t.replace("打开", "");
+                if (t.contains("打开")) {
+                    String app = t.replace("打开", "");
                     Log.i(TAG, app);
-                    String pn=appinfo.get(app.trim());
+                    String pn = appinfo.get(app.trim());
 
-                    Log.i(TAG,"size: "+appinfo.size());
+                    Log.i(TAG, "size: " + appinfo.size());
 
-                    openApp(pn);
-                }else if(t.contains("今天天气")){
+                    openApp(pn, t);
+                } else if (t.contains("今天天气")) {
                     //ttStoSpeech.speek("无法理解您的意思");
                     String url = AppClient.commonUrl + "sentence=" + t + "&userid=55/";
                     AppClient.ApiStores apiStores = AppClient.retrofit(url).create(AppClient.ApiStores.class);
@@ -265,7 +267,7 @@ public class SCVoiceService extends Service {
                             String reply = response.body().getReply();
                             String domain = response.body().getDomain();
                             Log.i(TAG, "Request Info :" + reply);
-                            if(reply == null || reply.equals("") || reply.trim() == null){
+                            if (reply == null || reply.equals("") || reply.trim() == null) {
                                 //startHintActivity(result);
                                 return;
                             }
@@ -273,11 +275,12 @@ public class SCVoiceService extends Service {
                             MyApplication.setWeekWeather(weekWeather);
                             Log.i(TAG, "weekWeather Info :" + weekWeather);
                             Gson gson = new Gson();
-                            List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>(){}.getType());
+                            List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>() {
+                            }.getType());
                             //Log.i(TAG, "weekWeather weather :" + weekList.get(0).getWeather());
 
-                            if(domain.equals("天气")){
-                                Intent intent = new Intent(SCVoiceService.this, WeatherActivity.class);
+                            if (domain.equals("天气")) {
+                                Intent intent = new Intent(RecordActivity.this, WeatherActivity.class);
                                 intent.putExtra("result", t);
                                 intent.putExtra("reply", reply);
                                 //intent.putExtra("weekWeather", weekWeather);
@@ -292,12 +295,13 @@ public class SCVoiceService extends Service {
                             //startHintActivity(result);
                         }
                     });
+                } else {
+                    startHintActivity(t);
                 }
 
                 long time = endtime - begintime;
-                Log.d(TAG, "onResults---:" + t +"\r\n"+ jo +"\r\n" + "使用时间"
+                Log.d(TAG, "onResults---:" + t + "\r\n" + jo + "\r\n" + "使用时间"
                         + time);
-
 
             }
 
@@ -331,6 +335,7 @@ public class SCVoiceService extends Service {
         public void onError(final int error) {
             // TODO Auto-generated method stub
             //ttStoSpeech.speek("我不知道你在说什么");
+            startHintActivity(null);
             switch (error) {
                 case 1:
                     Log.d(TAG, "出错了 " + error + "网络超时\r\n");
@@ -359,9 +364,8 @@ public class SCVoiceService extends Service {
                     break;
                 default:
                     Log.d(TAG, "出错了 " + error + "");
-                    stopSelf();
+                    release();
                     break;
-
             }
         }
 
@@ -385,40 +389,36 @@ public class SCVoiceService extends Service {
         }
     };
 
-    public void readAllContacts() {
-        ArrayList<String> contacts = new ArrayList<String>();
-
-        Cursor cursor = getContentResolver()
-                .query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
-                        null);
-        int contactIdIndex = 0;
-        int nameIndex = 0;
-
-        if (cursor.getCount() > 0) {
-            contactIdIndex = cursor
-                    .getColumnIndex(ContactsContract.Contacts._ID);
-            nameIndex = cursor
-                    .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+    public void stopRecognition() {
+        if (r != null) {
+            Log.d(TAG, "stopRecognition");
+            //r.stopListening();
+            //r.cancel();
+            r.destroy();
         }
-        while (cursor.moveToNext()) {
-            String contactId = cursor.getString(contactIdIndex);
-            String name = cursor.getString(nameIndex);
-            contacts.add(name);
-        }
-        names = new String[contacts.size()];
-        for (int i = 0, j = contacts.size(); i < j; i++) {
-            names[i] = contacts.get(i);
-        }
-        Log.i("本机程序", ""+names.toString());
-        cursor.close();
+    }
 
+    private void startHintActivity(String result) {
+        Intent intent = new Intent(RecordActivity.this, SpeekHintActivity.class);
+        intent.putExtra("isResult", true);
+        intent.putExtra("Result", result);
+        startActivity(intent);
+    }
+
+    private PowerManager.WakeLock wakeLock;
+
+    private void wakeUp() {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.SCREEN_DIM_WAKE_LOCK, "Voice");
+        wakeLock.acquire();
     }
 
     /***
      * 获取本地程序列表
      * **/
     private void getInstalledApps() {
-        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+        /*List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
         List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>(packages.size());
 
         ArrayList<String> app=new ArrayList<String>();
@@ -438,7 +438,20 @@ public class SCVoiceService extends Service {
             map.put("desc", packageInfo.packageName);
             listMap.add(map);
             //}
+        }*/
+
+        final PackageManager packageManager = getPackageManager();
+        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        ArrayList<String> app = new ArrayList<String>();
+        // get all apps
+        final List<ResolveInfo> allApps = packageManager.queryIntentActivities(mainIntent, 0);
+        for (int i = 0; i < allApps.size(); i++) {
+            ResolveInfo resolveInfo = allApps.get(i);
+            app.add(resolveInfo.activityInfo.loadLabel(packageManager).toString());
+            appinfo.put(resolveInfo.activityInfo.loadLabel(getPackageManager()).toString(), resolveInfo.activityInfo.packageName);
         }
+
         apps = new String[app.size()];
         for (int i = 0, j = app.size(); i < j; i++) {
             Log.d(TAG, "app name = " + app.get(i));
@@ -447,36 +460,58 @@ public class SCVoiceService extends Service {
 
     }
 
-    private void openApp(String packageName) {
-        if(packageName != null){
+
+    private TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            List<ActivityManager.RunningTaskInfo> runningTask = manager.getRunningTasks(1);
+            ActivityManager.RunningTaskInfo runningTaskInfo = runningTask.get(0);
+            String packageName = runningTaskInfo.topActivity.getPackageName();
+            Log.d(TAG, "packageName" + packageName);
+            if (packageName.equals(LENOVO_HOME_PACKAGE)) {
+                release();
+            }
+        }
+    };
+
+    private void initViews() {
+        seismicWave = findViewById(R.id.seismicwave);
+        seismicWave.reStart().start();
+        gifImageView = findViewById(R.id.ball_gif);
+        //record_ball = findViewById(R.id.record_ball_gif);
+        //Glide.with(this).load(R.mipmap.keywest_ball_1).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(record_ball);
+    }
+
+
+    private void openApp(String packageName, String result) {
+        if (packageName != null) {
             PackageManager packageManager = getPackageManager();
-            Intent intent=new Intent();
-            intent =packageManager.getLaunchIntentForPackage(packageName);
+            Intent intent = new Intent();
+            intent = packageManager.getLaunchIntentForPackage(packageName);
             startActivity(intent);
             ttStoSpeech.speek("正在帮你打开");
-        }else {
+        } else {
             ttStoSpeech.speek("无法理解您的意思");
+            startHintActivity(result);
             Log.d(TAG, "package is null .... ");
         }
 
     }
 
 
-    private PowerManager.WakeLock wakeLock;
-    private void wakeUp(){
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
-                            | PowerManager.SCREEN_DIM_WAKE_LOCK, "Voice");
-        wakeLock.acquire();
-    }
-
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestory");
+        release();
+    }
+
+    private void release() {
         stopRecognition();
-        ttStoSpeech.releaseTTS();
-        if(timer != null){
+        if (ttStoSpeech != null) {
+            ttStoSpeech.releaseTTS();
+        }
+        if (timer != null) {
             timer.purge();
             timer.cancel();
         }
