@@ -6,22 +6,35 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.Toast;
 
 import com.baidu.speech.VoiceRecognitionService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +43,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.lenovo.voiceservice.httpRequest.AppClient;
+import cn.lenovo.voiceservice.httpRequest.OkHttpClientUtil;
+import cn.lenovo.voiceservice.jsonbean.MusicBean;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.jsonbean.WeekWeatherBean;
+import cn.lenovo.voiceservice.location.LocationManager;
+import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
 import cn.lenovo.voiceservice.view.SeismicWave;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,9 +65,12 @@ public class RecordActivity extends Activity {
     private static final String TAG = "SC-RecordActivity";
     private ImageView record_ball;
     private GifImageView gifImageView;
+    private GifDrawable gifDrawable;
     private TTStoSpeech ttStoSpeech;
     private SeismicWave seismicWave;
     private SpeechRecognizer r;
+
+    private OkHttpClient okHttpClient;
 
     private static final boolean SEND_CAST = false;
     private final String VOICE_ACTION = "cn.lenovo.voiceservice.VOICE_SERVICE";
@@ -70,11 +94,12 @@ public class RecordActivity extends Activity {
         setContentView(R.layout.activity_record);
         StatusBarUtils.hideNavgationBar(this);
         Log.d(TAG, "onCreate");
-        initViews();
+        registerReceiver();
         //initEvents();
         getInstalledApps();
         initRecognition(apps);
 
+        okHttpClient = new OkHttpClient();
         ttStoSpeech = new TTStoSpeech(this);
         manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         timer = new Timer(true);
@@ -103,12 +128,21 @@ public class RecordActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        initViews();
         if (wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
         }
         if (apps == null || apps.length == 0) {
             getInstalledApps();        //获取本机程序
+        }
+        if(MyApplication.isLocation){
+            ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if(wifiNetInfo.isConnected()
+                    && wifiNetInfo.getState() == NetworkInfo.State.CONNECTED){
+                LocationManager.getInstance(this);
+            }
         }
         startRecognition(apps);
     }
@@ -199,6 +233,14 @@ public class RecordActivity extends Activity {
 
         @Override
         public void onResults(Bundle results) {
+            if(gifDrawable != null
+                    && gifDrawable.isPlaying()){
+                gifDrawable.stop();
+                gifImageView.setImageResource(R.mipmap.loading);
+                gifDrawable = (GifDrawable) gifImageView.getDrawable();
+                gifDrawable.setLoopCount(4);
+                gifDrawable.start();
+            }
 
             List<String> rr = results
                     .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -230,12 +272,14 @@ public class RecordActivity extends Activity {
                     wakeUp();
                     /*Intent intent = new Intent("android.intent.action.ACTION_PICO_ON");
                     sendBroadcast(intent);*/
+                    finish();
                     return;
                 }
 
                 if (t.contains("关闭投影")) {
                     Intent intent = new Intent("android.intent.action.ACTION_PICO_OFF");
                     sendBroadcast(intent);
+                    finish();
                     return;
                 }
 
@@ -245,27 +289,52 @@ public class RecordActivity extends Activity {
                     return;
                 }
 
+                if(t.contains("我想画画")
+                        || t.contains("我想玩画画的游戏")){
+                    openApp(t, "东东教你画");
+                    return;
+                }
+
+                if(t.contains("我想玩动物卡片游戏")){
+                    openApp(t, "魔幻学园");
+                    return;
+                }
+
 
                 if (t.contains("打开")) {
                     String app = t.replace("打开", "");
                     Log.i(TAG, app);
-                    String pn = appinfo.get(app.trim());
-
                     Log.i(TAG, "size: " + appinfo.size());
+                    openApp(t, app.trim());
+                } else {
+                    String url = AppClient.commonUrl + "sentence=" + t + "&userid=123" + "&city=" + MyApplication.getLocationCity();
+                    OkHttpClientUtil.getInstance()._getAsyn(url, new OkHttpClientUtil.ResultCallback<String>() {
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            Log.d(TAG, "http request error = " + e.getMessage());
+                        }
 
-                    openApp(pn, t);
-                } else if (t.contains("今天天气")) {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "okhttp response = " + response);
+                            analyzeNLUResult(t, response);
+                        }
+                    });
+                }
+
+                /*else {
                     //ttStoSpeech.speek("无法理解您的意思");
-                    String url = AppClient.commonUrl + "sentence=" + t + "&userid=55/";
+                    String url = AppClient.commonUrl + "sentence=" + t + "&userid=123" + "&city=" + MyApplication.getLocationCity();
                     AppClient.ApiStores apiStores = AppClient.retrofit(url).create(AppClient.ApiStores.class);
-                    /*RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                    new Gson().toJson(new Enity("30921")));*/
-                    Call<WeatherBean> call = apiStores.getDomainBean(t, 55, "上海上海");
+                    *//*RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                    new Gson().toJson(new Enity("30921")));*//*
+                    Call<WeatherBean> call = apiStores.getDomainBean(t, 123, MyApplication.getLocationCity());
                     call.enqueue(new Callback<WeatherBean>() {
                         @Override
                         public void onResponse(Call<WeatherBean> call, Response<WeatherBean> response) {
                             String reply = response.body().getReply();
                             String domain = response.body().getDomain();
+                            Log.i(TAG, "domain Info :" + domain);
                             Log.i(TAG, "Request Info :" + reply);
                             if (reply == null || reply.equals("") || reply.trim() == null) {
                                 //startHintActivity(result);
@@ -295,9 +364,32 @@ public class RecordActivity extends Activity {
                             //startHintActivity(result);
                         }
                     });
+                }*/
+
+
+                /*else if(t.contains("故事")){
+
+                } else if(t.contains("歌")
+                        || t.contains("音乐")
+                        || t.contains("首")){
+                    String url = AppClient.commonUrl + "sentence=" + t + "&userid=123" + "&city=" + MyApplication.getLocationCity();
+                    AppClient.ApiStores apiStores = AppClient.retrofit(url).create(AppClient.ApiStores.class);
+                    Call<MusicBean> call = apiStores.getMusicBean(t, 12345);
+                    call.enqueue(new Callback<MusicBean>() {
+                        @Override
+                        public void onResponse(Call<MusicBean> call, Response<MusicBean> response) {
+                            Log.d(TAG, "music response = " + response.body().getDomain());
+                        }
+
+                        @Override
+                        public void onFailure(Call<MusicBean> call, Throwable t) {
+
+                        }
+                    });
+
                 } else {
-                    startHintActivity(t);
-                }
+                    startHintActivity(false, t, null, null);
+                }*/
 
                 long time = endtime - begintime;
                 Log.d(TAG, "onResults---:" + t + "\r\n" + jo + "\r\n" + "使用时间"
@@ -335,13 +427,18 @@ public class RecordActivity extends Activity {
         public void onError(final int error) {
             // TODO Auto-generated method stub
             //ttStoSpeech.speek("我不知道你在说什么");
-            startHintActivity(null);
+            if(gifDrawable != null
+                    && gifDrawable.isPlaying()){
+                gifDrawable.stop();
+            }
+            startHintActivity(false, null, null, null);
             switch (error) {
                 case 1:
                     Log.d(TAG, "出错了 " + error + "网络超时\r\n");
                     break;
                 case 2:
                     Log.d(TAG, "出错了 " + error + "网络错误\r\n");
+                    Toast.makeText(RecordActivity.this, "请连接网络!", Toast.LENGTH_LONG).show();
                     break;
                 case 3:
                     Log.d(TAG, "出错了 " + error + "录音出错\r\n");
@@ -373,7 +470,12 @@ public class RecordActivity extends Activity {
         public void onEndOfSpeech() {
             begintime = System.currentTimeMillis();
             Log.d(TAG, "onEndOfSpeech 收音结束");
-
+            if(gifDrawable != null){
+                gifDrawable.stop();
+                gifImageView.setImageResource(R.mipmap.end);
+                gifDrawable = (GifDrawable) gifImageView.getDrawable();
+                gifDrawable.start();
+            }
         }
 
         @Override
@@ -385,9 +487,97 @@ public class RecordActivity extends Activity {
         @Override
         public void onBeginningOfSpeech() {
             Log.d(TAG, "onBeginningOfSpeech ");
+            gifDrawable.stop();
+            gifImageView.setImageResource(R.mipmap.keywest_speak_60_90);
+            gifDrawable = (GifDrawable) gifImageView.getDrawable();
+            gifDrawable.setLoopCount(20);
+            gifDrawable.start();
 
         }
     };
+
+    private void analyzeNLUResult(String recognizeResult, String result){
+        JSONObject jsonObj = null;
+        String domain = null;
+        try {
+            jsonObj = new JSONObject(result);
+            domain = jsonObj.getString("domain");
+            Log.d(TAG, "domain = " + domain);
+            if(domain.equals("天气")){
+                displayWeatherInfo(recognizeResult, result);
+            }else if(domain.equals("音乐")){
+                displayMusicInfo(recognizeResult, result);
+            }else if(domain.equals("电台")){
+
+            }else if(domain.equals("其他")){
+
+            }else {
+                startHintActivity(false, recognizeResult, null, null);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    /**
+     * 天气信息
+     * @param recognizeResult
+     * @param result
+     * @throws JSONException
+     */
+    private void displayWeatherInfo(String recognizeResult, String result) throws JSONException {
+        Gson gson = new Gson();
+        WeatherBean weatherBean = gson.fromJson(result, WeatherBean.class);
+        String reply = weatherBean.getReply();
+        Log.i(TAG, "Request Info :" + reply);
+        if (reply == null || reply.equals("") || reply.trim() == null) {
+            //startHintActivity(result);
+            return;
+        }
+
+        String weekWeather = weatherBean.getIntent().get(0).get未来7天天气();
+        MyApplication.setWeekWeather(weekWeather);
+        Log.i(TAG, "weekWeather Info :" + weekWeather);
+
+        List<WeekWeatherBean> weekList = gson.fromJson(weekWeather, new TypeToken<List<WeekWeatherBean>>() {
+        }.getType());
+        //Log.i(TAG, "weekWeather weather :" + weekList.get(0).getWeather());
+
+        Intent intent = new Intent(RecordActivity.this, WeatherActivity.class);
+        intent.putExtra("result", recognizeResult);
+        intent.putExtra("reply", reply);
+        //intent.putExtra("weekWeather", weekWeather);
+        startActivity(intent);
+
+        ttStoSpeech.speek(reply);
+    }
+
+    /**
+     * 音乐信息
+     * @param recognizeResult
+     * @param result
+     * @throws JSONException
+     */
+    private void displayMusicInfo(String recognizeResult, String result) throws JSONException {
+        Gson gson = new Gson();
+        MusicBean musicBean = gson.fromJson(result, MusicBean.class);
+        String musicName = musicBean.getIntent().get(1).get歌曲名();
+        String singer = musicBean.getIntent().get(0).get歌手名();
+        if(musicName == null){
+            // 随机播放
+            Log.d(TAG, "随机播放");
+        }else if(singer == null){
+            // 歌曲名
+            Log.d(TAG, "根据歌曲名播放");
+            //ttStoSpeech.speek("没有这首歌哦");
+        }else {
+            // 歌手名
+            Log.d(TAG, "根据歌手名播放");
+        }
+
+    }
 
     public void stopRecognition() {
         if (r != null) {
@@ -398,8 +588,11 @@ public class RecordActivity extends Activity {
         }
     }
 
-    private void startHintActivity(String result) {
+    private void startHintActivity(boolean openApp, String result, String packageName, String appName) {
         Intent intent = new Intent(RecordActivity.this, SpeekHintActivity.class);
+        intent.putExtra("pkgName", packageName);
+        intent.putExtra("appName", appName);
+        intent.putExtra("openApp", openApp);
         intent.putExtra("isResult", true);
         intent.putExtra("Result", result);
         startActivity(intent);
@@ -476,28 +669,95 @@ public class RecordActivity extends Activity {
 
     private void initViews() {
         seismicWave = findViewById(R.id.seismicwave);
-        seismicWave.reStart().start();
+        //seismicWave.reStart().start();
         gifImageView = findViewById(R.id.ball_gif);
+        gifImageView.setImageResource(R.mipmap.keywest_speak_0_30);
         //record_ball = findViewById(R.id.record_ball_gif);
         //Glide.with(this).load(R.mipmap.keywest_ball_1).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(record_ball);
+        gifDrawable = (GifDrawable) gifImageView.getDrawable();
+        gifDrawable.setLoopCount(100);
+        gifDrawable.start();
     }
 
 
-    private void openApp(String packageName, String result) {
+    private void openApp(String result, String appName) {
+        String packageName = appinfo.get(appName);
         if (packageName != null) {
-            PackageManager packageManager = getPackageManager();
+            /*PackageManager packageManager = getPackageManager();
             Intent intent = new Intent();
             intent = packageManager.getLaunchIntentForPackage(packageName);
-            startActivity(intent);
-            ttStoSpeech.speek("正在帮你打开");
-        } else {
-            ttStoSpeech.speek("无法理解您的意思");
-            startHintActivity(result);
+            startActivity(intent);*/
+            ttStoSpeech.speek("亲爱的,已帮你打开" + appName);
+            startHintActivity(true, result, packageName, appName);
+        } else if(appName != null){
+            ttStoSpeech.speek("找不到"+appName);
+            startHintActivity(false, result, null, null);
             Log.d(TAG, "package is null .... ");
         }
 
     }
 
+    private VoiceBroadCastReceiver mVoiceReceiver;
+    private void registerReceiver(){
+        mVoiceReceiver = new VoiceBroadCastReceiver(mHandler);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addDataScheme("package");
+        registerReceiver(mVoiceReceiver, filter);
+    }
+
+    public static final int PACKAGE_ADD = 11;
+    public static final int PACKAGE_REMOVE = 12;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case PACKAGE_ADD:
+                    String addPkg = (String) msg.obj;
+                    addPackage(addPkg);
+                    break;
+                case PACKAGE_REMOVE:
+                    String removePkg = (String) msg.obj;
+                    deletePackage(removePkg);
+                    break;
+            }
+        }
+    };
+
+    private void addPackage(String pkgName){
+        try {
+            ApplicationInfo info = getPackageManager().getApplicationInfo(pkgName, 0);
+            if(apps != null && appinfo != null && info != null){
+                appinfo.put(info.loadLabel(getPackageManager()).toString(), pkgName);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deletePackage(String pkgName){
+        if(apps != null && appinfo != null){
+            for(Map.Entry<String, String> entry : appinfo.entrySet()){
+                if(entry.getValue().equals(pkgName)){
+                    Log.d(TAG, "map key = " + entry.getKey() + "\n" + "map value = " + entry.getValue());
+                    appinfo.remove(entry.getKey());
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(gifDrawable != null
+                && gifDrawable.isPlaying()){
+            Log.d(TAG, "onPause stop gif Animation");
+            gifDrawable.stop();
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -515,5 +775,9 @@ public class RecordActivity extends Activity {
             timer.purge();
             timer.cancel();
         }
+        if(mVoiceReceiver != null){
+            unregisterReceiver(mVoiceReceiver);
+        }
     }
+
 }

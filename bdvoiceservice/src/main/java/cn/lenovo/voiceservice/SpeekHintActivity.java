@@ -2,6 +2,7 @@ package cn.lenovo.voiceservice;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,13 +69,29 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         result_layout = findViewById(R.id.result_layout);
         result_tv = findViewById(R.id.result_tv);
         result_tv_hint = findViewById(R.id.result_tv_hint);
+        boolean openApp = intent.getBooleanExtra("openApp", false);
         boolean isResult = intent.getBooleanExtra("isResult", false);
         String result = intent.getStringExtra("Result");
-        if(isResult && result != null){
+        String pkgName = intent.getStringExtra("pkgName");
+        String appName = intent.getStringExtra("appName");
+        if(openApp){
             viewFlipper.setVisibility(View.GONE);
             result_layout.setVisibility(View.VISIBLE);
             result_tv.setText(result);
-            result_tv_hint.setText("我不知道你在说些什么");
+            result_tv_hint.setText("已帮你打开" + appName);
+            PackageManager packageManager = getPackageManager();
+            Intent openIntent = new Intent();
+            openIntent = packageManager.getLaunchIntentForPackage(pkgName);
+            if(openIntent != null){
+                startActivity(openIntent);
+            }
+        }else {
+            if(isResult && result != null){
+                viewFlipper.setVisibility(View.GONE);
+                result_layout.setVisibility(View.VISIBLE);
+                result_tv.setText(result);
+                result_tv_hint.setText("暂不支持此功能");
+            }
         }
     }
 
@@ -142,4 +159,13 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// 注意
+        intent.addCategory(Intent.CATEGORY_HOME);
+        this.startActivity(intent);
+        finish();
+    }
 }

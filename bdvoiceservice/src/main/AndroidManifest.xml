@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.lenovo.voiceservice"
-    >
+    android:sharedUserId="android.uid.system">
     <!-- android:sharedUserId="android.uid.system" -->
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_icon"
@@ -69,12 +75,31 @@
 
         <activity android:name=".WeatherActivity"/>
         <activity android:name=".SpeekHintActivity"/>
+        <activity android:name=".MainActivity"/>
 
         <service android:name=".SCVoiceService"
             android:exported="true"/>
 
         <service android:name=".VoiceService"
             android:exported="true"/>
+
+
+        <!-- Baidu Location -->
+        <!-- 声明service组件 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+
+        <!-- AK鉴权 -->
+        <!-- meta-data需要写在application中 -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="Pnj7hiIwIQj1sdwLGjBSjsojnOhVsftB" />  <!-- http://lbsyun.baidu.com/apiconsole/key -->
+
+
+
     </application>
 
 </manifest>

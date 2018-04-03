@@ -107,8 +107,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
                 pm_Tv.setText(currentDayWeather.getPm25());
                 detail_info.setText(currentDayWeather.getWeather_night() + "," + currentDayWeather.getWind_direction() + currentDayWeather.getWind() + ",湿度" + currentDayWeather.getHumidity());
                 city.setText(currentDayWeather.getCity());
-                high_tem.setText(currentDayWeather.getHighTem());
-                low_tem.setText(currentDayWeather.getLowTem());
+                high_tem.setText(currentDayWeather.getHighTem() + "°");
+                low_tem.setText(currentDayWeather.getLowTem() + "°");
                 String weather = currentDayWeather.getWeather();
                 Log.d(TAG, "weather = " + weather);
                 Drawable BG_drawable = getResources().getDrawable(R.mipmap.bg_cloud);
@@ -130,14 +130,17 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
                 weather_icon.setImageDrawable(MIcon_drawable);
                 Log.d(TAG, "currentDayWeather.getHourWeather() = " + currentDayWeather.getHourWeather());
                 List<HourWeatherBean> hourWeatherList = gson.fromJson("["+currentDayWeather.getHourWeather()+"]", new TypeToken<List<HourWeatherBean>>(){}.getType());
-                Log.d(TAG, "hourWeatherBean " + hourWeatherList.get(0).getWeather().getHumidity());
-                String hourTemp = hourWeatherList.get(0).getWeather().getTemperature();
-                hour_temp.setText(hourTemp);
-                for(int i = 1; i < 6; i++){
-                    adapterList.add(weekList.get(i));
+                if(hourWeatherList.get(0) != null){
+                    Log.d(TAG, "hourWeatherBean " + hourWeatherList.get(0).getWeather().getHumidity());
+                    String hourTemp = hourWeatherList.get(0).getWeather().getTemperature();
+                    hour_temp.setText(hourTemp+"°");
+                    for(int i = 1; i < 6; i++){
+                        adapterList.add(weekList.get(i));
+                    }
+                    //adapter.notifyDataSetChanged();
+                    Log.d(TAG, "size = " + adapterList.size());
                 }
-                //adapter.notifyDataSetChanged();
-                Log.d(TAG, "size = " + adapterList.size());
+
             }
         }
     }
@@ -233,5 +236,15 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
             private TextView tempTv;
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// 注意
+        intent.addCategory(Intent.CATEGORY_HOME);
+        this.startActivity(intent);
+        finish();
     }
 }

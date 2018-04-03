@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cn.lenovo.voiceservice.jsonbean.MusicBean;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
@@ -35,7 +36,7 @@ public class AppClient {
 
     private static final String TAG = "SC-AppClient";
     static Retrofit mRetrofit;
-    public static final String commonUrl = "http://awareness.lenovo.com.cn/nlu/";
+    public static final String commonUrl = "http://awareness.lenovo.com.cn/nlu/?";
 
     public static Retrofit retrofit(String url) {
         Log.d(TAG, "url = " + url + "\n" + "mRetrofit = " + mRetrofit);
@@ -162,6 +163,8 @@ public class AppClient {
         @GET("?")
         Call<WeatherBean> getDomainBean(@Query("sentence") String sentence, @Query("userid") int userid, @Query("city") String city);
 
+        @GET("?")
+        Call<MusicBean> getMusicBean(@Query("sentence") String sentence, @Query("userid") int userid);
 
     }
 
