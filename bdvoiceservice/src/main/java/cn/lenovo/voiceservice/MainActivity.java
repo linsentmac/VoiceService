@@ -15,13 +15,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = findViewById(R.id.startVoice);
+        /*button = findViewById(R.id.startVoice);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startService(new Intent(MainActivity.this, SCVoiceService.class));
             }
-        });
+        });*/
 
     }
 }

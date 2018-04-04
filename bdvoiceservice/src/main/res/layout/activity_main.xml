@@ -1,15 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".MainActivity">
-
-
-    <Button
-        android:id="@+id/startVoice"
+    android:background="#000"
+    >
+    <TextView
+        android:id="@+id/tv_speaker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start Voice"/>
+        android:text="我想听个童话故事"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#fff"
+        android:textSize="12sp"/>
+    <TextView
+        android:id="@+id/tv_storyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="好的，我们来讲卖火柴的小女孩"
+        android:textSize="10dp"
+        android:textColor="#82bfff"
+        android:layout_below="@+id/tv_speaker"/>
+    <RelativeLayout
+        android:id="@+id/rl_storyText"
+        android:layout_width="420dp"
+        android:layout_height="200dp"
+        android:background="@drawable/fillet"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/tv_storyName">
+        <ImageView
+            android:id="@+id/iv_picture"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:visibility="visible"
+            android:src="@mipmap/ic_launcher"/>
+        <!--<TextView
+            android:id="@+id/tv_storyContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/iv_picture"
+            android:textColor="#7e8c8d"
+            android:textSize="11sp"
+            android:text=""/>-->
 
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_toRightOf="@+id/iv_picture">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <cn.lenovo.voiceservice.story.MyView
+                    android:id="@+id/tv_storyContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="6000dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="10dp"
+                    android:text=""
+                    android:textColor="#7e8c8d"
+                    android:textSize="8sp"
+                    app:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_record"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/mic"/>
+
+    <RelativeLayout
+        android:layout_width="420dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/rl_storyText"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayout">
+        <ImageView
+            android:id="@+id/iv_start"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/start"/>
+        <TextView
+            android:id="@+id/tv_currentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_start"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="#fff"
+            android:text="02:45"
+            android:textSize="12sp"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="312dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_marginLeft="5dp"
+            android:layout_centerInParent="true"
+            android:max="100"
+            android:progress="0"
+            android:layout_toRightOf="@id/tv_currentTime" />
+
+        <TextView
+            android:id="@+id/tv_totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/seekBar"
+            android:layout_marginLeft="5dp"
+            android:textColor="#fff"
+            android:text="05:28"
+            android:textSize="12sp"/>
+    </RelativeLayout>
 </RelativeLayout>
+
+

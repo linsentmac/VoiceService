@@ -50,6 +50,7 @@ import java.util.TimerTask;
 import cn.lenovo.voiceservice.httpRequest.AppClient;
 import cn.lenovo.voiceservice.httpRequest.OkHttpClientUtil;
 import cn.lenovo.voiceservice.jsonbean.MusicBean;
+import cn.lenovo.voiceservice.jsonbean.StoryBean;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.jsonbean.WeekWeatherBean;
 import cn.lenovo.voiceservice.location.LocationManager;
@@ -62,6 +63,7 @@ import cn.lenovo.voiceservice.music.utils.MusicUtils;
 import cn.lenovo.voiceservice.music.utils.PermissionReq;
 import cn.lenovo.voiceservice.music.utils.ToastUtils;
 import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
+import cn.lenovo.voiceservice.story.StoryActivity;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
 import cn.lenovo.voiceservice.view.SeismicWave;
 import okhttp3.OkHttpClient;
@@ -436,7 +438,7 @@ public class RecordActivity extends Activity {
             // TODO Auto-generated method stub
 
         }
-        
+
         @Override
         public void onError(final int error) {
             // TODO Auto-generated method stub
@@ -533,7 +535,11 @@ public class RecordActivity extends Activity {
                 ttStoSpeech.speek(reply);
                 startHintActivity(false, recognizeResult, reply,null, null);
             } else {
-                startHintActivity(false, recognizeResult, null, null, null);
+                if(recognizeResult.contains("故事")){
+                    displayStoryInfo(recognizeResult, result);
+                }else {
+                    startHintActivity(false, recognizeResult, null, null, null);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -602,7 +608,64 @@ public class RecordActivity extends Activity {
             Log.d(TAG, "根据歌手名播放");
             playMusic(2, singer, recognizeResult);
         }
+    }
 
+    /**
+     * 故事信息
+     * @param recognizeResult
+     * @param result
+     * @throws JSONException
+     */
+    private void displayStoryInfo(String recognizeResult, String result) throws JSONException {
+        Log.d(TAG, "displayStoryInfo");
+        if(recognizeResult.contains("白雪公主")){
+            startStoryActivity(1, "白雪公主");
+        } else if(recognizeResult.contains("灰姑娘")){
+            startStoryActivity(1, "灰姑娘");
+        } else if(recognizeResult.contains("卖火柴的小女孩")){
+            startStoryActivity(1, "卖火柴的小女孩");
+        } else if(recognizeResult.contains("睡美人")){
+            startStoryActivity(1, "睡美人");
+        } else if(recognizeResult.contains("小红帽")){
+            startStoryActivity(1, "小红帽");
+        } else {
+            JSONObject jsonObj;
+            String domain = null;
+            try {
+                jsonObj = new JSONObject(result);
+                domain = jsonObj.getString("domain");
+                if(domain.equals("电台")){
+                    Gson gson = new Gson();
+                    StoryBean storyBean = gson.fromJson(result, StoryBean.class);
+                    String style = storyBean.getIntent().get(0).get风格();
+                    if(style != null
+                            && style.equals("故事")){
+                        // 随机
+                        startStoryActivity(0, null);
+                    } else {
+                        startHintActivity(false, recognizeResult, null, null, null);
+                    }
+                } else if(domain.equals("新闻")
+                        && recognizeResult.contains("讲个故事")){
+                    // 随机
+                    startStoryActivity(0, null);
+                } else {
+                    startHintActivity(false, recognizeResult, null, null, null);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                startHintActivity(false, recognizeResult, null, null, null);
+            }
+        }
+
+    }
+
+    private void startStoryActivity(int type, String name){
+        Log.e(TAG, "startStoryActivity: " + type);
+        Intent storyIntent = new Intent(this, StoryActivity.class);
+        storyIntent.putExtra("storyType", type);
+        storyIntent.putExtra("storyName", name);
+        startActivity(storyIntent);
     }
 
     private void playMusic(int type, String musicName, String result) {

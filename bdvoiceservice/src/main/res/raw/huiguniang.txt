@@ -1,0 +1,151 @@
+﻿[ti:灰姑娘]
+[ar:Lenovo]
+[al:安徒生童话]
+[00:00.00] huáng dì de xīn zhuāng  
+[00:00.00]灰姑娘
+[00:02.02]cóng qián yǒu gè kě ài de xiǎo nǚ hái ，
+[00:02.02]从前有个可爱的小女孩，
+[00:04.66]tā cōng míng piāo liàng ，xīn dì shàn liáng 。zhè gè nǚ hái méi yǒu mǔ qīn ，
+[00:04.66]她聪明漂亮，心地善良。这个女孩没有母亲，
+[00:09.87]yīn wéi tā de mā mā zài tā hěn xiǎo de shí hòu jiù bìng shì le 。
+[00:09.87]因为她的妈妈在他很小的时候就病逝了。
+[00:14.39]xiǎo nǚ hái de fù qīn wéi tā zhǎo le gè xīn mā mā ，
+[00:14.39]小女孩的父亲为她找了个新妈妈，
+[00:17.79]xīn mā mā hái dài lái le liǎng gè jiě jiě ，
+[00:17.79]新妈妈还带来了两个姐姐，
+[00:20.91]dàn tā men bú téng ài xiǎo nǚ hái ，hái nuè dài tā 。
+[00:20.91]但她们不疼爱小女孩，还虐待她。
+[00:24.56]xīn mā mā yī zhí mìng lìng xiǎo nǚ hái zuò fán zhòng de jiā wù huó ，
+[00:24.56]新妈妈一直命令小女孩做繁重的家务活，
+[00:29.27]ràng zì jǐ yǒu de liǎng gè nǚ ér zài yī páng wán shuǎ 。
+[00:29.27]让自己有的两个女儿在一旁玩耍。
+[00:32.88]xiǎo nǚ hái zǒng shì zài lú zào páng huī tóu tǔ liǎn dì gōng zuò zhe ，
+[00:32.88]小女孩总是在炉灶旁灰头土脸地工作着，
+[00:37.46]huài xīn yǎn de jiě jiě men cháng cháng xiào tā ，
+[00:37.46]坏心眼的姐姐们常常笑她，
+[00:40.66]shēn shàng zhān mǎn huī chén zāng xī xī de ，yīn cǐ jiào tā "huī gū niáng "。
+[00:40.66]身上沾满灰尘脏兮兮的，因此叫她"灰姑娘"。
+[00:46.35]wáng zǐ fā chū qǐng tiē ，
+[00:46.35]王子发出请帖，
+[00:48.35]yāo qǐng gè hù rén jiā de nǚ hái cān jiā chéng bǎo lǐ jǔ háng de wǔ huì ，
+[00:48.35]邀请各户人家的女孩参加城堡里举行的舞会，
+[00:52.87]nǚ hái men jiē dào yāo qǐng ，huān hū què yuè 。
+[00:52.87]女孩们接到邀请，欢呼雀跃。
+[00:56.07]huī gū niáng de liǎng gè jiě jiě yě shōu dào le qǐng tiē ，
+[00:56.07]灰姑娘的两个姐姐也收到了请帖，
+[00:59.43]tā men gāo xìng dì shāng liàng zhe chuān shí me yī fú cān jiā wǔ huì 。
+[00:59.43]她们高兴地商量着穿什么衣服参加舞会。
+[01:03.48]dāng tiān ，jì mǔ hé liǎng gè jiě jiě mìng lìng huī gū niáng jì xù zài jiā dǎ sǎo fáng jiān ，
+[01:03.48]当天，继母和两个姐姐命令灰姑娘继续在家打扫房间，
+[01:09.53]bú xǔ cān jiā wáng zǐ de wǔ huì 。
+[01:09.53]不许参加王子的舞会。
+[01:11.73]huī gū niáng fēi cháng xiàn mù liǎng wèi jiě jiě ，bú jìn bēi cóng zhōng lái ：
+[01:11.73]灰姑娘非常羡慕两位姐姐，不禁悲从中来：
+[01:16.97]"ā ，wǒ yě hǎo xiǎng qù cān jiā wáng zǐ de wǔ huì ā ！"mǎ chē lái le 。
+[01:16.97]"啊，我也好想去参加王子的舞会啊！"马车来了。
+[01:23.38]liǎng gè jiě jiě dǎ bàn dé piāo piāo liàng liàng de ，gēn zhe mā mā chū le mén 。
+[01:23.38]两个姐姐打扮得漂漂亮亮的，跟着妈妈出了门。
+[01:27.83]mǎ chē zǒu hòu ，gū niáng yī gè rén ，yī biān tí zhe shuǐ tǒng shāng xīn dì gàn zhe huó ，
+[01:27.83]马车走后，姑娘一个人，一边提着水桶伤心地干着活，
+[01:33.74]yī biān wàng zhe wáng gōng de fāng xiàng ，tā yě hǎo xiǎng qù cān jiā wáng zǐ de wǔ huì 。
+[01:33.74]一边望着王宫的方向，她也好想去参加王子的舞会。
+[01:39.88]tā méi yǒu piāo liàng de yī fú ，yě méi yǒu huá lì de mǎ chē ，
+[01:39.88]她没有漂亮的衣服，也没有华丽的马车，
+[01:43.83]xiǎng dào zhè lǐ ，huī gū niáng zài huǒ lú páng chōu yē qǐ lái 。
+[01:43.83]想到这里，灰姑娘在火炉旁抽噎起来。
+[01:48.63]"xiǎo jiě 。"tū rán yǒu rén jiào zài huī gū niáng bèi hòu jiào tā ，
+[01:48.63]"小姐。"突然有人叫在灰姑娘背后叫她，
+[01:54.22]huī gū niáng xià le yī tiào ，zhuǎn tóu yī kàn ，yī wèi lǎo pó pó zhàn zài shēn hòu 。
+[01:54.22]灰姑娘吓了一跳，转头一看，一位老婆婆站在身后。
+[02:00.03]tā wèn huī gū niáng ："nǐ wéi shí me kū ya ？"huī gū niáng cā gàn yǎn lèi ，
+[02:00.03]她问灰姑娘："你为什么哭呀？"灰姑娘擦干眼泪，
+[02:05.92]shuō ："wǒ xiǎng cān jiā wáng zǐ de wǔ huì ，kě shì wǒ méi yǒu piāo liàng de yī fú 。"
+[02:05.92]说："我想参加王子的舞会，可是我没有漂亮的衣服。"
+[02:11.73]lǎo pó pó xiào le ，tā kǒu zhōng niàn niàn yǒu cí ，
+[02:11.73]老婆婆笑了，她口中念念有词，
+[02:15.78]rán hòu yòng guǎi zhàng chù pèng huī gū niáng de yī fú ，
+[02:15.78]然后用拐杖触碰灰姑娘的衣服，
+[02:19.09]zhuǎn shùn zhī jiān ，huī gū niáng de zāng yī fú biàn chéng le yào yǎn duó mù de xīn lǐ fú 。
+[02:19.09]转瞬之间，灰姑娘的脏衣服变成了耀眼夺目的新礼服。
+[02:24.59]huī gū niáng dà chī yī jīng ，yuán lái lǎo pó pó shì gè mó fǎ shī ya ！
+[02:24.59]灰姑娘大吃一惊，原来老婆婆是个魔法师呀！
+[02:29.39]lǎo pó pó yòu ná chū yī shuāng piāo liàng de shuǐ jīng xié ，gěi huī gū niáng huàn shàng ，
+[02:29.39]老婆婆又拿出一双漂亮的水晶鞋，给灰姑娘换上，
+[02:34.66]hái jiāng nán guā biàn chéng piāo liàng de mǎ chē ，jiāng lǎo shǔ biàn chéng chē fū hé mǎ pǐ 。
+[02:34.66]还将南瓜变成漂亮的马车，将老鼠变成车夫和马匹。
+[02:41.62]huī gū niáng bú yóu dé gǎn jī lǎo pó pó ：
+[02:41.62]灰姑娘不由得感激老婆婆：
+[02:44.21]"xiè xiè nín de mó fǎ ，wǒ qù cān jiā wǔ huì le ！"
+[02:44.21]"谢谢您的魔法，我去参加舞会了！"
+[02:47.51]"jì zhù ，yī dìng yào zài wǔ yè shí èr diǎn zhī qián huí lái ！"
+[02:47.51]"记住，一定要在午夜十二点之前回来！"
+[02:52.21]lǎo pó pó zuì hòu dīng zhǔ dào 。piāo liàng de gōng zhǔ huī gū niáng tiào shàng mǎ chē ，
+[02:52.21]老婆婆最后叮嘱道。漂亮的公主灰姑娘跳上马车，
+[02:57.97]xiàng wáng gōng de fāng xiàng shǐ qù ，xīn lǐ wú bǐ xìng fèn hé jǐn zhāng 。
+[02:57.97]向王宫的方向驶去，心里无比兴奋和紧张。
+[03:02.77]dāng huī gū niáng jìn rù wáng gōng de dà tīng ，
+[03:02.77]当灰姑娘进入王宫的大厅，
+[03:05.16]wǔ huì shàng suǒ yǒu de rén dōu zhēng dà yǎn jīng kàn zhe huī gū niáng ，
+[03:05.16]舞会上所有的人都睁大眼睛看着灰姑娘，
+[03:08.72]dōu yǐ wéi tā shì lín guó de gōng zhǔ 。wáng zǐ yī kàn jiàn huī gū niáng ，
+[03:08.72]都以为她是邻国的公主。王子一看见灰姑娘，
+[03:12.96]jiù yāo qǐng huī gū niáng gēn tā yī qǐ tiào wǔ 。
+[03:12.96]就邀请灰姑娘跟她一起跳舞。
+[03:15.81]huī gū niáng de shuāng jiǎo jiù xiàng hú dié yī yàng ，qīng kuài de wǔ dòng zhe 。
+[03:15.81]灰姑娘的双脚就像蝴蝶一样，轻快的舞动着。
+[03:20.36]wáng zǐ hé huī gū niáng tiào le hěn jiǔ ，yǎn kàn jiù kuài dào shí èr diǎn le ，
+[03:20.36]王子和灰姑娘跳了很久，眼看就快到十二点了，
+[03:25.99]huī gū niáng xiǎng qǐ le lǎo pó pó de huà ，
+[03:25.99]灰姑娘想起了老婆婆的话，
+[03:28.53]jí máng xiàng wáng zǐ gào cí ，zhuǎn shēn lí kāi wáng gōng 。
+[03:28.53]急忙向王子告辞，转身离开王宫。
+[03:32.29]wáng zǐ fēi cháng xǐ huān huī gū niáng ，wèn dào ：
+[03:32.29]王子非常喜欢灰姑娘，问道：
+[03:35.28]"nǐ dào dǐ shì nǎ gè guó jiā de gōng zhǔ ne ？wǒ huì qù zhǎo nǐ de 。"
+[03:35.28]"你到底是哪个国家的公主呢？我会去找你的。"
+[03:39.43]huī gū niáng méi yǒu dā huà ，jí máng gǎn zhe lí kāi 。
+[03:39.43]灰姑娘没有搭话，急忙赶着离开。
+[03:43.19]dāng tā xià tái jiē shí ，bú xiǎo xīn diào le yī zhī xié ，
+[03:43.19]当她下台阶时，不小心掉了一只鞋，
+[03:46.95]kě shì tā yě gù bú shàng zhè zhī xié le 。
+[03:46.95]可是她也顾不上这只鞋了。
+[03:49.10]huī gū niáng méi yǒu lǐ huì wáng zǐ de hū hǎn ，
+[03:49.10]灰姑娘没有理会王子的呼喊，
+[03:51.81]fǎn ér jiā kuài jiǎo bù cháo zhe yōu àn de chéng bǎo wài pǎo qù 。
+[03:51.81]反而加快脚步朝着幽暗的城堡外跑去。
+[03:55.72]dāng tā pǎo chū chéng bǎo shí ，mó fǎ xiāo shī le ，mǎ chē bú jiàn le ，
+[03:55.72]当她跑出城堡时，魔法消失了，马车不见了，
+[04:00.67]nà piāo liàng de yī fú yě huī fù chéng yuán lái yòu zāng yòu pò de bù yī 。
+[04:00.67]那漂亮的衣服也恢复成原来又脏又破的布衣。
+[04:05.13]huī gū niáng zhī néng jiè zhe yuè guāng huí dào le jiā ，hé wǎng cháng yī yàng zuò zhe jiā wù huó 。
+[04:05.13]灰姑娘只能借着月光回到了家，和往常一样做着家务活。
+[04:10.80]wǔ huì jié shù hòu ，wáng zǐ rì yè sī niàn zhe huī gū niáng ，
+[04:10.80]舞会结束后，王子日夜思念着灰姑娘，
+[04:14.79]kě shì sì chù dǎ tīng dōu méi yǒu yī diǎn xiāo xī ，
+[04:14.79]可是四处打听都没有一点消息，
+[04:18.14]wéi yī de xiàn suǒ zhī yǒu tā jiǎn dào de shuǐ jīng xié 。
+[04:18.14]唯一的线索只有他捡到的水晶鞋。
+[04:21.50]wáng zǐ xià lìng ：nǎ gè nǚ hái néng chuān shàng zhè zhī xié ，tā jiù shì wǒ de xīn niáng 。
+[04:21.50]王子下令：哪个女孩能穿上这只鞋，她就是我的新娘。
+[04:27.27]quán chéng de gū niáng dōu shì chuān guò zhè zhī xié ，
+[04:27.27]全城的姑娘都试穿过这只鞋，
+[04:29.98]kě réng jiù méi zhǎo dào néng chuān shàng zhè zhī shuǐ jīng xié de gū niáng 。
+[04:29.98]可仍旧没找到能穿上这只水晶鞋的姑娘。
+[04:34.37]zhōng yú ，wáng zǐ de pú rén ná zhe zhè zhī shuǐ jīng xié lái dào le huī gū niáng de jiā 。
+[04:34.37]终于，王子的仆人拿着这只水晶鞋来到了灰姑娘的家。
+[04:39.72]liǎng gè jiě jiě dōu shì guò le ，bú hé shì 。
+[04:39.72]两个姐姐都试过了，不合适。
+[04:42.57]lún dào huī gū niáng ，tā ná qǐ xié chuān zài jiǎo shàng 。
+
+[04:42.57]轮到灰姑娘，她拿起鞋穿在脚上。
+[04:46.31]ya ，zhèng hé shì ，wáng zǐ de pú rén xìng fèn de jiào dào ：
+[04:46.31]呀，正合适，王子的仆人兴奋的叫道：
+[04:50.87]"jiù shì zhè gè xiǎo jiě ，tā zhè shì wáng zǐ yào zhǎo gōng zhǔ ya ！"
+[04:50.87]"就是这个小姐，她这是王子要找公主呀！"
+[04:55.27]liǎng gè jiě jiě mù dèng kǒu dāi ，jīng yà jí le 。
+[04:55.27]两个姐姐目瞪口呆，惊讶极了。
+[04:58.72]bú jiǔ ，huī gū niáng hé wáng zǐ jǔ háng le hūn lǐ ，chǎng miàn shèng dà ，rè nào fēi fán 。
+[04:58.72]不久，灰姑娘和王子举行了婚礼，场面盛大，热闹非凡。
+[05:04.63]huī gū niáng cóng cǐ guò zhe xìng fú kuài lè de shēng huó 。
+[05:04.63]灰姑娘从此过着幸福快乐的生活。
+

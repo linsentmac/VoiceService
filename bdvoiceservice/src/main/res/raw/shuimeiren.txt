@@ -1,0 +1,113 @@
+﻿[ti:睡美人]
+[ar:Lenovo]
+[al:格林童话]
+[00:00.00]shuì měi rén
+[00:00.00]睡美人
+[00:02.71]cóng qián yǒu gè guó wáng hé wáng hòu ，tā men yī zhí wéi méi yǒu hái zǐ ér shāng xīn 。
+[00:02.71]从前有个国王和王后，他们一直为没有孩子而伤心。
+[00:08.76]yǒu yī tiān wáng hòu zài hé biān sàn bù ，xiǎo yú duì tā shuō ：
+[00:08.76]有一天王后在河边散步，小鱼对她说：
+[00:14.29]"nǐ de yuàn wàng mǎ shàng jiù huì shí xiàn le 。bú jiǔ ，nǐ jiāng shēng xià yī gè nǚ ér 。"
+[00:14.29]"你的愿望马上就会实现了。不久，你将生下一个女儿。"
+[00:19.90]guò le yī duàn shí jiān ，xiǎo yú de yù yán shí xiàn le ，wáng hòu shēng xià le yī gè nǚ ér 。
+[00:19.90]过了一段时间，小鱼的预言实现了，王后生下了一个女儿。
+[00:25.97]guó wáng hěn gāo xìng ，jué dìng jǔ háng yī gè shèng dà de yàn huì ，
+[00:25.97]国王很高兴，决定举行一个盛大的宴会，
+[00:29.98]yāo qǐng suǒ yǒu de nǚ wū ，ràng tā men wéi zì jǐ de nǚ ér sòng shàng shàn liáng měi hǎo de zhù yuàn 。
+[00:29.98]邀请所有的女巫，让他们为自己的女儿送上善良美好的祝愿。
+[00:36.73]wáng guó lǐ yī gòng yòu shí sān gè nǚ wū ，dàn guó wáng yīn wéi shū hū zhī yāo qǐng le shí èr gè 。
+[00:36.73]王国里一共又十三个女巫，但国王因为疏忽只邀请了十二个。
+[00:44.56]yàn huì shàng nǚ wū men yǒu de sòng gěi xiǎo gōng zhǔ měi dé ，
+[00:44.56]宴会上女巫们有的送给小公主美德，
+[00:48.67]yǒu de sòng gěi tā měi mào ，hái yǒu de sòng gěi tā fù yǒu 。
+[00:48.67]有的送给她美貌，还有的送给她富有。
+[00:52.88]tā men bǎ shì rén xiàng wǎng de ，suǒ yǒu měi hǎo de shì wù dōu sòng gěi le tā 。
+[00:52.88]她们把世人向往的，所有美好的事物都送给了她。
+[00:57.38]zhè shí ，méi yǒu bèi yāo qǐng de dì shí sān gè nǚ wū fèn nù de zǒu le jìn lái 。
+[00:57.38]这时，没有被邀请的第十三个女巫愤怒的走了进来。
+[01:02.43]tā niàn qǐ le zhòu yǔ ，zǔ zhòu gōng zhǔ zài shí wǔ suì de shí ，
+[01:02.43]她念起了咒语，诅咒公主在十五岁的时，
+[01:06.85]bèi yī gè fǎng chuí nòng shāng ，rán hòu sǐ qù 。
+[01:06.85]被一个纺锤弄伤，然后死去。
+[01:10.94]hěn dú de nǚ wū zǒu hòu ，bèi yāo qǐng de nǚ wū zhōng ，nián zhǎng de yī wèi shuō ：
+[01:10.94]狠毒的女巫走后，被邀请的女巫中，年长的一位说：
+[01:16.46]"zhè gè xiōng xiǎn de zhòu yǔ de què huì yīng yàn ，dàn gōng zhǔ bú huì sǐ qù ，
+[01:16.46]"这个凶险的咒语的确会应验，但公主不会死去，
+[01:22.46]zhī shì huì hūn shuì yī bǎi nián ，rán hòu bèi yī wèi wáng zǐ wěn xǐng 。"
+[01:22.46]只是会昏睡一百年，然后被一位王子吻醒。"
+[01:29.37]guó wáng wéi le fáng zhǐ gōng zhǔ zāo dào bú xìng ，xià lìng shāo huǐ le wáng guó lǐ suǒ yǒu de fǎng chuí 。
+[01:29.37]国王为了防止公主遭到不幸，下令烧毁了王国里所有的纺锤。
+[01:36.00]gōng zhǔ zhǎng dà le ，nǚ wū men de suǒ yǒu zhù fú dōu zài gōng zhǔ shēn shàng yīng yàn le ，
+[01:36.00]公主长大了，女巫们的所有祝福都在公主身上应验了，
+[01:41.93]cōng míng měi lì ，wēn róu yōu yǎ ，rén jiàn rén ài 。
+[01:41.93]聪明美丽，温柔优雅，人见人爱。
+[01:45.47]zài tā shí wǔ suì de nà tiān ，guó wáng hé wáng hòu dōu chū mén le 。
+[01:45.47]在她十五岁的那天，国王和王后都出门了。
+[01:50.08]gōng zhǔ zài wáng gōng lǐ chuān lái chuān qù ，tā kàn dào yī zuò gǔ lǎo ér xiá zhǎi de lóu tī ，
+[01:50.08]公主在王宫里穿来穿去，她看到一座古老而狭窄的楼梯，
+[01:56.64]lóu tī jìn tóu yǒu yī shàn mén ，mén shàng chā zhe yī bǎ jīn yào shí 。
+[01:56.64]楼梯尽头有一扇门，门上插着一把金钥匙。
+[02:01.93]dāng tā dǎ kāi fáng mén shí ，yī gè lǎo tài pó zhèng zuò zài lǐ miàn fǎng shā 。
+[02:01.93]当她打开房门时，一个老太婆正坐在里面纺纱。
+[02:07.33]gōng zhǔ shuō ："lǎo nǎi nǎi nín hǎo ，nín zhè shì zài gàn shí me ya ？"
+[02:07.33]公主说："老奶奶您好，您这是在干什么呀？"
+[02:12.37]"fǎng shā 。"lǎo tài pó huí dá 。"zhè gè xiǎo dōng xī zhuǎn qǐ lái zhēn yǒu yì sī "，
+[02:12.37]"纺纱。"老太婆回答。"这个小东西转起来真有意思"，
+[02:20.19]gōng zhǔ gāng yī pèng dào fǎng chuí jiù dǎo zài dì shàng ，shī qù le zhī jiào 。
+[02:20.19]公主刚一碰到纺锤就倒在地上，失去了知觉。
+[02:24.93]nà gè è dú de zhòu yǔ zhēn de yīng yàn le ，gōng zhǔ dǎo zài nà lǐ ，chén chén de shuì le 。
+[02:24.93]那个恶毒的咒语真的应验了，公主倒在那里，沉沉的睡了。
+[02:31.49]guó wáng hé wáng hòu huí lái le ，tā men gāng zǒu jìn dà tīng ，yě gēn zhe shuì zhe le 。
+[02:31.49]国王和王后回来了，他们刚走进大厅，也跟着睡着了。
+[02:36.94]mǎ jiù lǐ de mǎ ，yuàn zǐ lǐ de gǒu ，wū dǐng shàng de gē zǐ ，yě dōu shuì zhe le 。
+[02:36.94]马厩里的马，院子里的狗，屋顶上的鸽子，也都睡着了。
+[02:42.44]shèn zhì lián huǒ lú lǐ de huǒ yě tíng zhǐ le rán shāo ，
+[02:42.44]甚至连火炉里的火也停止了燃烧，
+[02:45.84]zhè yī qiē dōu bú dòng le ，quán dōu chén chén de shuì qù。
+[02:45.84]这一切都不动了，全都沉沉的睡去。
+[02:50.68]bú jiǔ ，wáng gōng sì zhōu zhǎng chū le yī dào lí bā qiáng 。
+[02:50.68]不久，王宫四周长出了一道篱笆墙。
+[02:54.24]nián fù yī nián ，tā men yuè zhǎng yuè gāo ，yuè zhǎng yuè mào mì ，
+[02:54.24]年复一年，它们越长越高，越长越茂密，
+[02:58.61]zuì hòu jiāng zhěng zuò wáng gōng zhē dé yán yán shí shí 。
+[02:58.61]最后将整座王宫遮得严严实实。
+[03:02.41]guān yú zhè gè wáng guó liú chuán zhe yī gè chuán shuō ，
+[03:02.41]关于这个王国流传着一个传说，
+[03:05.70]piāo liàng de gōng diàn lǐ yǒu yī wèi méi guī gōng zhǔ zhèng zài chén shuì 。
+[03:05.70]漂亮的宫殿里有一位玫瑰公主正在沉睡。
+[03:09.45]cóng nà yǐ hòu yǒu bú shǎo wáng zǐ qián lái tàn xiǎn ，
+[03:09.45]从那以后有不少王子前来探险，
+[03:12.86]tā men pī jīng zhǎn jí xiǎng chuān guò lí bā lái dào wáng gōng lǐ ，dàn dōu méi yǒu chéng gōng 。
+[03:12.86]他们披荆斩棘想穿过篱笆来到王宫里，但都没有成功。
+[03:17.87]xǔ duō nián guò qù le ，yòu yǒu yī wèi wáng zǐ tà shàng le zhè kuài tǔ dì 。
+[03:17.87]许多年过去了，又有一位王子踏上了这块土地。
+[03:23.47]nà tiān shí jiān gāng hǎo guò qù le yī bǎi nián ，suǒ yǐ wáng zǐ lái dào lí bā cóng shí ，
+[03:23.47]那天时间刚好过去了一百年，所以王子来到篱笆丛时，
+[03:28.82]tā kàn dào de quán shì shèng kāi zhe měi lì huā duǒ de guàn mù 。
+[03:28.82]他看到的全是盛开着美丽花朵的灌木。
+[03:32.58]tā hěn qīng sōng dì chuān guò lí bā ，jìn dào le wáng gōng lǐ 。
+[03:32.58]他很轻松地穿过篱笆，进到了王宫里。
+[03:36.22]yī qiē dōu jìng dé chū qí ，lián zì jǐ de hū xī dōu qīng xī kě wén 。
+[03:36.22]一切都静得出奇，连自己的呼吸都清晰可闻。
+[03:41.47]zhōng yú ，wáng zǐ tuī kāi le méi guī gōng zhǔ de fáng mén ，
+[03:41.47]终于，王子推开了玫瑰公主的房门，
+[03:46.01]méi guī gōng zhǔ shuì dé zhèng xiāng ，hái shì nà me měi lì dòng rén 。
+[03:46.01]玫瑰公主睡得正香，还是那么美丽动人。
+[03:50.62]wáng zǐ jìn bú zhù fǔ xià shēn ，wěn le yī xià gōng zhǔ 。
+[03:50.62]王子禁不住俯下身，吻了一下公主。
+[03:54.93]jiù zhè me yī wěn ，méi guī gōng zhǔ sū xǐng le guò lái ，
+[03:54.93]就这么一吻，玫瑰公主苏醒了过来，
+[03:58.63]tā zhāng kāi shuāng yǎn shēn qíng dì níng shì zhe wáng zǐ 。
+[03:58.63]她张开双眼深情地凝视着王子。
+[04:02.19]wáng zǐ qiān zhe tā zǒu chū le gōng diàn ，cǐ kè guó wáng hé wáng hòu yě xǐng le guò lái ，
+[04:02.19]王子牵着她走出了宫殿，此刻国王和王后也醒了过来，
+[04:08.78]huáng gōng lǐ de suǒ yǒu rén dōu xǐng le guò lái 。
+[04:08.78]皇宫里的所有人都醒了过来。
+[04:11.42]tā men huái zhe jí dà de yí huò ，nǐ kàn zhe wǒ ，wǒ kàn zhe nǐ ，
+[04:11.42]他们怀着极大的疑惑，你看着我，我看着你，
+[04:15.22]sì hū hái bú míng bái dào dǐ fā shēng le shí me shì qíng 。
+[04:15.22]似乎还不明白到底发生了什么事情。
+[04:19.23]bú jiǔ ，wáng zǐ hé méi guī gōng zhǔ jǔ háng le shèng dà de jié hūn diǎn lǐ ，
+[04:19.23]不久，王子和玫瑰公主举行了盛大的结婚典礼，
+[04:24.33]kuài lè dì shēng huó zài le yī qǐ 。
+[04:24.33]快乐地生活在了一起。
