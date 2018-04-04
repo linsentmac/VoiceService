@@ -436,7 +436,7 @@ public class RecordActivity extends Activity {
             // TODO Auto-generated method stub
 
         }
-
+        
         @Override
         public void onError(final int error) {
             // TODO Auto-generated method stub
@@ -486,7 +486,7 @@ public class RecordActivity extends Activity {
             Log.d(TAG, "onEndOfSpeech 收音结束");
             if(gifDrawable != null){
                 gifDrawable.stop();
-                gifImageView.setImageResource(R.mipmap.end);
+                gifImageView.setImageResource(R.mipmap.loading);
                 gifDrawable = (GifDrawable) gifImageView.getDrawable();
                 gifDrawable.start();
             }
@@ -537,6 +537,7 @@ public class RecordActivity extends Activity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            startHintActivity(false, recognizeResult, null, null, null);
         }
 
 
@@ -627,6 +628,10 @@ public class RecordActivity extends Activity {
                         AppCache.get().getLocalMusicList().clear();
                         AppCache.get().getLocalMusicList().addAll(musicList);
                         AudioPlayer.get().setMusicList(musicList);
+                        if(musicList.size() == 0){
+                            startHintActivity(false, result, "本地没有歌曲", null, null);
+                            return;
+                        }
                         switch (type){
                             case 0:
                                 Random random = new Random();

@@ -1,8 +1,12 @@
 package cn.lenovo.voiceservice.music.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import cn.lenovo.voiceservice.R;
 import cn.lenovo.voiceservice.music.model.Music;
@@ -10,8 +14,10 @@ import cn.lenovo.voiceservice.music.other.AppCache;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -159,5 +165,70 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private static final String TAG = "SC-FileUtils";
+
+    private static String path = Environment.getExternalStorageDirectory() + "/Music/";
+
+
+    public static void copyDBToSD(Context context){
+        //获取资产管理者
+        AssetManager am = context.getAssets();
+        try {
+            String[] files = am.list("");
+            Log.d(TAG, "Assert files size = " + files.length);
+
+            File rootfile=new File(path);
+            if(!rootfile.exists()){
+                rootfile.mkdir();
+            }
+            String[] rootFileNames = rootfile.list();
+            boolean isExist;
+            for(String filename : files){
+                isExist = false;
+                if(filename.endsWith(".mp3")){
+                    for(String rootFileName : rootFileNames){
+                        if(rootFileName.equals(filename)){
+                            Log.d(TAG, filename + " is exist !");
+                            isExist = true;
+                            break;
+                        }
+                    }
+
+                    if(!isExist){
+                        Log.d(TAG, "Copy " + filename + " to Music");
+                        //打开资产目录下的文件
+                        InputStream inputStream = am.open(filename);
+
+                        File file = new File(rootfile, filename);
+                        FileOutputStream fos=new FileOutputStream(file);
+                        int len=0;
+                        byte[] buffer=new byte[1024];
+                        while((len=inputStream.read(buffer))!=-1){
+                            fos.write(buffer,0,len);
+                        }
+                        fos.close();
+                        scanFile(context, path + filename);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 通知媒体库更新文件
+     * @param context
+     * @param filePath 文件全路径
+     *
+     * */
+    private static void scanFile(Context context, String filePath) {
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(Uri.fromFile(new File(filePath)));
+        context.sendBroadcast(scanIntent);
     }
 }

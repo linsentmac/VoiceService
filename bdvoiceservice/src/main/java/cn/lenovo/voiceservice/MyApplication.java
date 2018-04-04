@@ -16,6 +16,7 @@ import com.baidu.mapapi.SDKInitializer;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.location.LocationManager;
 import cn.lenovo.voiceservice.location.LocationService;
+import cn.lenovo.voiceservice.music.utils.FileUtils;
 
 
 /**
@@ -45,6 +46,8 @@ public class MyApplication extends Application {
         }else {
             isLocation = true;
         }
+
+        FileUtils.copyDBToSD(getApplicationContext());
 
     }
 
