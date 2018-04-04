@@ -1,6 +1,7 @@
 package cn.lenovo.voiceservice;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +31,8 @@ import android.widget.Toast;
 import com.baidu.speech.VoiceRecognitionService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,6 +53,14 @@ import cn.lenovo.voiceservice.jsonbean.MusicBean;
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.jsonbean.WeekWeatherBean;
 import cn.lenovo.voiceservice.location.LocationManager;
+import cn.lenovo.voiceservice.music.activity.MusicActivity;
+import cn.lenovo.voiceservice.music.constants.RxBusTags;
+import cn.lenovo.voiceservice.music.model.Music;
+import cn.lenovo.voiceservice.music.other.AppCache;
+import cn.lenovo.voiceservice.music.service.AudioPlayer;
+import cn.lenovo.voiceservice.music.utils.MusicUtils;
+import cn.lenovo.voiceservice.music.utils.PermissionReq;
+import cn.lenovo.voiceservice.music.utils.ToastUtils;
 import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
 import cn.lenovo.voiceservice.view.SeismicWave;
@@ -92,7 +105,7 @@ public class RecordActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        StatusBarUtils.hideNavgationBar(this);
+
         Log.d(TAG, "onCreate");
         registerReceiver();
         //initEvents();
@@ -128,6 +141,7 @@ public class RecordActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        StatusBarUtils.hideNavgationBar(this);
         initViews();
         if (wakeLock != null) {
             wakeLock.release();
@@ -431,7 +445,7 @@ public class RecordActivity extends Activity {
                     && gifDrawable.isPlaying()){
                 gifDrawable.stop();
             }
-            startHintActivity(false, null, null, null);
+            startHintActivity(false, null, null, null, null);
             switch (error) {
                 case 1:
                     Log.d(TAG, "出错了 " + error + "网络超时\r\n");
@@ -499,20 +513,27 @@ public class RecordActivity extends Activity {
     private void analyzeNLUResult(String recognizeResult, String result){
         JSONObject jsonObj = null;
         String domain = null;
+        String reply = null;
         try {
             jsonObj = new JSONObject(result);
             domain = jsonObj.getString("domain");
+            reply = jsonObj.getString("reply");
             Log.d(TAG, "domain = " + domain);
-            if(domain.equals("天气")){
+            if(domain.equals("天气")) {
                 displayWeatherInfo(recognizeResult, result);
-            }else if(domain.equals("音乐")){
+            } else if(domain.equals("音乐")) {
                 displayMusicInfo(recognizeResult, result);
-            }else if(domain.equals("电台")){
-
-            }else if(domain.equals("其他")){
-
-            }else {
-                startHintActivity(false, recognizeResult, null, null);
+            } else if(domain.equals("关于")) {
+                ttStoSpeech.speek(reply);
+                startHintActivity(false, recognizeResult, reply, null, null);
+            } else if(domain.equals("计算器")){
+                ttStoSpeech.speek(reply);
+                startHintActivity(false, recognizeResult, reply,null, null);
+            } else if(domain.equals("日历")){
+                ttStoSpeech.speek(reply);
+                startHintActivity(false, recognizeResult, reply,null, null);
+            } else {
+                startHintActivity(false, recognizeResult, null, null, null);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -565,18 +586,98 @@ public class RecordActivity extends Activity {
         MusicBean musicBean = gson.fromJson(result, MusicBean.class);
         String musicName = musicBean.getIntent().get(1).get歌曲名();
         String singer = musicBean.getIntent().get(0).get歌手名();
-        if(musicName == null){
+        String singerBat = musicBean.getIntent().get(1).get歌手名();
+        if(musicName == null && singerBat == null){
             // 随机播放
             Log.d(TAG, "随机播放");
-        }else if(singer == null){
+            playMusic(0, null, recognizeResult);
+        }else if(singerBat == null){
             // 歌曲名
             Log.d(TAG, "根据歌曲名播放");
+            playMusic(1, musicName, recognizeResult);
             //ttStoSpeech.speek("没有这首歌哦");
         }else {
             // 歌手名
             Log.d(TAG, "根据歌手名播放");
+            playMusic(2, singer, recognizeResult);
         }
 
+    }
+
+    private void playMusic(int type, String musicName, String result) {
+        AppCache.get().init(this.getApplication());
+        scanMusic(type, musicName, result);
+    }
+
+    @Subscribe(tags = {@Tag(RxBusTags.SCAN_MUSIC)})
+    public void scanMusic(int type, String musicName, String result) {
+        PermissionReq.with(this).permissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).result(new PermissionReq.Result() {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void onGranted() {
+                new AsyncTask<Void, Void, List<Music>>() {
+                    @Override
+                    protected List<Music> doInBackground(Void... params) {
+                        return MusicUtils.scanMusic(RecordActivity.this);
+                    }
+
+                    @Override
+                    protected void onPostExecute(List<Music> musicList) {
+                        Log.e(TAG, "scan musicList: " + musicList.size());
+                        AppCache.get().getLocalMusicList().clear();
+                        AppCache.get().getLocalMusicList().addAll(musicList);
+                        AudioPlayer.get().setMusicList(musicList);
+                        switch (type){
+                            case 0:
+                                Random random = new Random();
+                                //找到了
+                                Intent randomIntent = new Intent(RecordActivity.this, MusicActivity.class);
+                                randomIntent.putExtra("music", musicList.get(random.nextInt(musicList.size())));
+                                startActivity(randomIntent);
+                                break;
+
+                            case 1:
+                                //扫描结束，开始匹配
+                                for (int i = 0; i < musicList.size(); i++) {
+                                    if (musicName != null && musicName.equals(musicList.get(i).getTitle())) {
+                                        //找到了
+                                        Intent intent = new Intent(RecordActivity.this, MusicActivity.class);
+                                        intent.putExtra("music", musicList.get(i));
+                                        startActivity(intent);
+                                        break;
+                                    }
+                                    if (i == musicList.size() - 1) {
+                                        startHintActivity(false, result, "找不到此歌曲", null, null);
+                                    }
+                                }
+                                break;
+
+                            case 2:
+                                //扫描结束，开始匹配
+                                for (int i = 0; i < musicList.size(); i++) {
+                                    if (musicName != null && musicName.equals(musicList.get(i).getArtist())) {
+                                        //找到了
+                                        Intent intent = new Intent(RecordActivity.this, MusicActivity.class);
+                                        intent.putExtra("music", musicList.get(i));
+                                        startActivity(intent);
+                                        break;
+                                    }
+                                    if (i == musicList.size() - 1) {
+                                        startHintActivity(false, result, "找不到此歌曲", null, null);
+                                    }
+                                }
+                                break;
+                        }
+
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onDenied() {
+                ToastUtils.show("没有存储空间权限，无法扫描本地歌曲！");
+            }
+        }).request();
     }
 
     public void stopRecognition() {
@@ -588,13 +689,14 @@ public class RecordActivity extends Activity {
         }
     }
 
-    private void startHintActivity(boolean openApp, String result, String packageName, String appName) {
+    private void startHintActivity(boolean openApp, String result, String hintContent, String packageName, String appName) {
         Intent intent = new Intent(RecordActivity.this, SpeekHintActivity.class);
         intent.putExtra("pkgName", packageName);
         intent.putExtra("appName", appName);
         intent.putExtra("openApp", openApp);
         intent.putExtra("isResult", true);
         intent.putExtra("Result", result);
+        intent.putExtra("hintContent", hintContent);
         startActivity(intent);
     }
 
@@ -688,10 +790,10 @@ public class RecordActivity extends Activity {
             intent = packageManager.getLaunchIntentForPackage(packageName);
             startActivity(intent);*/
             ttStoSpeech.speek("亲爱的,已帮你打开" + appName);
-            startHintActivity(true, result, packageName, appName);
+            startHintActivity(true, result, null, packageName, appName);
         } else if(appName != null){
             ttStoSpeech.speek("找不到"+appName);
-            startHintActivity(false, result, null, null);
+            startHintActivity(false, result,null,null, null);
             Log.d(TAG, "package is null .... ");
         }
 

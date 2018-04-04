@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lenovo.smartcastvoice.music.activity.MusicActivity">
+
+    <TextView
+        android:id="@+id/tv_reco_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="“我想听歌”"
+        android:textColor="#ffffff"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_reco_title"
+        android:layout_alignStart="@+id/tv_reco_title"
+        android:layout_below="@+id/tv_reco_title"
+        android:layout_marginTop="5dp"
+        android:text="好的，现在为您播放"
+        android:textColor="#83beff"
+        android:textSize="16sp"/>
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/pl_gifView"
+        android:layout_width="@dimen/x220"
+        android:layout_height="@dimen/x220"
+        android:layout_marginLeft="@dimen/x270"
+        android:layout_marginStart="@dimen/x270"
+        android:layout_marginTop="@dimen/x100"
+        android:src="@mipmap/keywest_music"/>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="507dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pl_gifView"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_song_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:maxWidth="90dp"
+            android:singleLine="true"
+            android:text="红豆"
+            android:textColor="#A5A1AA"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_singer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/tv_song_name"
+            android:layout_toRightOf="@+id/tv_song_name"
+            android:ellipsize="end"
+            android:maxWidth="80dp"
+            android:singleLine="true"
+            android:text="王菲"
+            android:textColor="#A5A1AA"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/iv_music_play_paused"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/music_play"/>
+
+        <ImageView
+            android:id="@+id/iv_music_play_paused_anim"
+            android:layout_width="55px"
+            android:layout_height="55px"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/click_animation_list"/>
+
+        <ImageView
+            android:id="@+id/iv_music_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@+id/iv_music_play_paused"
+            android:layout_toStartOf="@+id/iv_music_play_paused"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/music_last"/>
+
+        <ImageView
+            android:id="@+id/iv_music_last_anim"
+            android:layout_width="41px"
+            android:layout_height="41px"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@+id/iv_music_play_paused"
+            android:layout_toStartOf="@+id/iv_music_play_paused"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/click_animation_list"/>
+
+        <ImageView
+            android:id="@+id/iv_music_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/iv_music_play_paused"
+            android:layout_toRightOf="@+id/iv_music_play_paused"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/music_next"/>
+
+        <ImageView
+            android:id="@+id/iv_music_next_anim"
+            android:layout_width="41px"
+            android:layout_height="41px"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/iv_music_play_paused"
+            android:layout_toRightOf="@+id/iv_music_play_paused"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/click_animation_list"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_play_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
+            android:text="2:45"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+        <SeekBar
+            android:id="@+id/mSeekBar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="388dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginStart="60dp"
+            android:max="100"
+            android:progress="30"/>
+
+        <TextView
+            android:id="@+id/tv_total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="450dp"
+            android:layout_marginStart="450dp"
+            android:text="5:28"
+            android:textColor="#7Fffffff"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_start_voice_reco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="450dp"
+        android:layout_marginStart="450dp"
+        android:layout_marginTop="120dp"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/mic"/>
+
+    <ImageView
+        android:id="@+id/iv_start_voice_reco_anim"
+        android:layout_width="53px"
+        android:layout_height="53px"
+        android:layout_marginLeft="450dp"
+        android:layout_marginStart="450dp"
+        android:layout_marginTop="120dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/click_animation_list"/>
+</RelativeLayout>

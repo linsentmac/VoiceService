@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+//************ Music ************
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 26
@@ -21,16 +23,11 @@ android {
         }
     }
 
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                //这里修改apk文件名
-                def fileName = "SCVoiceService.apk"
-                //def fileName = outputFile.name.replace("app", "${rootProject.ext.appName}-${releaseTime()}-${defaultConfig.versionCode}-${defaultConfig.versionName}")
-
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
+    //打包apk重命名
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def time = new Date().format("yyyy-MM-dd", TimeZone.getDefault())
+            outputFileName = "SCVoiceService.apk"
         }
     }
 
@@ -39,6 +36,19 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    //************ Music ************
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+//************ Music ************
+greendao {
+    schemaVersion 1
+    targetGenDir 'src/main/java'
+    daoPackage "${android.defaultConfig.applicationId}.music.db.greendao"
 }
 
 dependencies {
@@ -56,4 +66,10 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile files('libs/BaiduLBS_Android.jar')
+
+    //************ Music ************
+    implementation 'com.zhy:okhttputils:2.6.2'
+    implementation 'com.hwangjr.rxbus:rxbus:2.0.0'
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'me.wcy:lrcview:2.0.1'
 }

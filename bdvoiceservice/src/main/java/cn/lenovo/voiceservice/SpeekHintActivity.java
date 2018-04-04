@@ -74,6 +74,7 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         String result = intent.getStringExtra("Result");
         String pkgName = intent.getStringExtra("pkgName");
         String appName = intent.getStringExtra("appName");
+        String hintContent = intent.getStringExtra("hintContent");
         if(openApp){
             viewFlipper.setVisibility(View.GONE);
             result_layout.setVisibility(View.VISIBLE);
@@ -90,7 +91,11 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
                 viewFlipper.setVisibility(View.GONE);
                 result_layout.setVisibility(View.VISIBLE);
                 result_tv.setText(result);
-                result_tv_hint.setText("暂不支持此功能");
+                if(hintContent != null){
+                    result_tv_hint.setText(hintContent);
+                }else {
+                    result_tv_hint.setText("暂不支持此功能");
+                }
             }
         }
     }

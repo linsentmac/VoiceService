@@ -13,4 +13,18 @@
 
     <string name="weather_answer">上海今天晴天,东风3级,适合外出游玩</string>
 
+    <!-- ************ Music ************ -->
+    <string name="cancel">取消</string>
+    <string name="download_success">%s下载完成</string>
+    <string name="unknown">未知</string>
+    <string name="tips">温馨提示</string>
+    <string name="download_tips">当前处于移动网络，下载将消耗较多流量，是否继续下载？</string>
+    <string name="download_tips_sure">继续下载</string>
+    <string name="setting_key_mobile_network_play">mobile_network_play</string>
+    <string name="setting_key_mobile_network_download">mobile_network_download</string>
+    <string name="setting_key_sound_effect">sound_effect</string>
+    <string name="setting_key_filter_size">filter_size</string>
+    <string name="setting_key_filter_time">filter_time</string>
+
+
 </resources>
