@@ -73,8 +73,10 @@ public class StoryActivity extends Activity implements View.OnClickListener, Ani
 
 
     private String[] storyNames = new String[]{"白雪公主", "灰姑娘", "卖火柴的小女孩", "睡美人", "小红帽"};
-    private int[] storyMp3 = new int[]{R.raw.baixue, R.raw.hgn, R.raw.mhcdxnh, R.raw.smr, R.raw.xhm};
-    private int[] storyText = new int[]{R.raw.baixuegongzhu, R.raw.huiguniang, R.raw.maihuochaidexiaonvhai, R.raw.shuimeiren, R.raw.xiaohongmao};
+    //private int[] storyMp3 = new int[]{R.raw.baixue, R.raw.hgn, R.raw.mhcdxnh, R.raw.smr, R.raw.xhm};
+    //private int[] storyText = new int[]{R.raw.baixuegongzhu, R.raw.huiguniang, R.raw.maihuochaidexiaonvhai, R.raw.shuimeiren, R.raw.xiaohongmao};
+    private int[] storyMp3 = new int[]{};
+    private int[] storyText = new int[]{};
     private int[] bxImage = new int[]{R.mipmap.baixuegongzhu_1, R.mipmap.baixuegongzhu_2, R.mipmap.baixuegongzhu_3};
     private int[] hgnImage = new int[]{R.mipmap.huiguniang_1, R.mipmap.huiguniang_2, R.mipmap.huiguniang_3, R.mipmap.huiguniang_4};
     private int[] mhcImage = new int[]{R.mipmap.maihuochaidexiaonvhai_1, R.mipmap.maihuochaidexiaonvhai_2, R.mipmap.maihuochaidexiaonvhai_3, R.mipmap.maihuochaidexiaonvhai_4, R.mipmap.maihuochaidexiaonvhai_5, R.mipmap.maihuochaidexiaonvhai_6};

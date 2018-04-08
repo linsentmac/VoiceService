@@ -23,9 +23,7 @@ import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.baidu.speech.VoiceRecognitionService;
@@ -34,11 +32,9 @@ import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,17 +59,13 @@ import cn.lenovo.voiceservice.music.utils.MusicUtils;
 import cn.lenovo.voiceservice.music.utils.PermissionReq;
 import cn.lenovo.voiceservice.music.utils.ToastUtils;
 import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
-import cn.lenovo.voiceservice.story.StoryActivity;
+import cn.lenovo.voiceservice.story.StoryLrcActivity;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
 import cn.lenovo.voiceservice.view.SeismicWave;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RecordActivity extends Activity {
 
@@ -285,9 +277,9 @@ public class RecordActivity extends Activity {
                 }
 
                 if (t.contains("打开投影")) {
-                    wakeUp();
-                    /*Intent intent = new Intent("android.intent.action.ACTION_PICO_ON");
-                    sendBroadcast(intent);*/
+                    //wakeUp();
+                    Intent intent = new Intent("android.intent.action.ACTION_PICO_ON");
+                    sendBroadcast(intent);
                     finish();
                     return;
                 }
@@ -318,7 +310,12 @@ public class RecordActivity extends Activity {
 
 
                 if (t.contains("打开")) {
-                    String app = t.replace("打开", "");
+
+                    int index = t.indexOf("打开");
+                    String app = t.substring(index + 2);
+                    Log.d(TAG, "index = " + index + "/ subStr = " + app);
+
+                    // String app = t.replace("打开", "");
                     Log.i(TAG, app);
                     Log.i(TAG, "size: " + appinfo.size());
                     openApp(t, app.trim());
@@ -490,6 +487,7 @@ public class RecordActivity extends Activity {
                 gifDrawable.stop();
                 gifImageView.setImageResource(R.mipmap.loading);
                 gifDrawable = (GifDrawable) gifImageView.getDrawable();
+                gifDrawable.setLoopCount(4);
                 gifDrawable.start();
             }
         }
@@ -512,6 +510,11 @@ public class RecordActivity extends Activity {
         }
     };
 
+    /**
+     * 对于NLP的内容进行分类解析
+     * @param recognizeResult　语音识别结果
+     * @param result　分析的结果
+     */
     private void analyzeNLUResult(String recognizeResult, String result){
         JSONObject jsonObj = null;
         String domain = null;
@@ -619,15 +622,15 @@ public class RecordActivity extends Activity {
     private void displayStoryInfo(String recognizeResult, String result) throws JSONException {
         Log.d(TAG, "displayStoryInfo");
         if(recognizeResult.contains("白雪公主")){
-            startStoryActivity(1, "白雪公主");
+            startStoryActivity(recognizeResult, 1, "白雪公主");
         } else if(recognizeResult.contains("灰姑娘")){
-            startStoryActivity(1, "灰姑娘");
+            startStoryActivity(recognizeResult, 1, "灰姑娘");
         } else if(recognizeResult.contains("卖火柴的小女孩")){
-            startStoryActivity(1, "卖火柴的小女孩");
+            startStoryActivity(recognizeResult, 1, "卖火柴的小女孩");
         } else if(recognizeResult.contains("睡美人")){
-            startStoryActivity(1, "睡美人");
+            startStoryActivity(recognizeResult, 1, "睡美人");
         } else if(recognizeResult.contains("小红帽")){
-            startStoryActivity(1, "小红帽");
+            startStoryActivity(recognizeResult, 1, "小红帽");
         } else {
             JSONObject jsonObj;
             String domain = null;
@@ -637,18 +640,26 @@ public class RecordActivity extends Activity {
                 if(domain.equals("电台")){
                     Gson gson = new Gson();
                     StoryBean storyBean = gson.fromJson(result, StoryBean.class);
-                    String style = storyBean.getIntent().get(0).get风格();
+                    List<StoryBean.IntentBean> list = storyBean.getIntent();
+                    String style = null;
+                    if(list != null){
+                        StoryBean.IntentBean intentBean = list.get(0);
+                        if(intentBean != null){
+                            style = storyBean.getIntent().get(0).get风格();
+                        }
+                    }
                     if(style != null
-                            && style.equals("故事")){
+                            && (style.equals("故事")
+                                || style.equals("童话故事"))){
                         // 随机
-                        startStoryActivity(0, null);
+                        startStoryActivity(recognizeResult, 0, null);
                     } else {
                         startHintActivity(false, recognizeResult, null, null, null);
                     }
                 } else if(domain.equals("新闻")
                         && recognizeResult.contains("讲个故事")){
                     // 随机
-                    startStoryActivity(0, null);
+                    startStoryActivity(recognizeResult, 0, null);
                 } else {
                     startHintActivity(false, recognizeResult, null, null, null);
                 }
@@ -660,9 +671,10 @@ public class RecordActivity extends Activity {
 
     }
 
-    private void startStoryActivity(int type, String name){
+    private void startStoryActivity(String result, int type, String name){
         Log.e(TAG, "startStoryActivity: " + type);
-        Intent storyIntent = new Intent(this, StoryActivity.class);
+        Intent storyIntent = new Intent(this, StoryLrcActivity.class);
+        storyIntent.putExtra("storyResult", result);
         storyIntent.putExtra("storyType", type);
         storyIntent.putExtra("storyName", name);
         startActivity(storyIntent);

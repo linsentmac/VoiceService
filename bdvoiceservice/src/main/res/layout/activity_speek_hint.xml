@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/x137"
+        android:layout_marginRight="@dimen/x80"
         android:src="@mipmap/mic"/>
 
 
@@ -58,9 +58,10 @@
 
     <RelativeLayout
         android:id="@+id/result_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:visibility="gone">
 
         <TextView

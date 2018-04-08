@@ -32,21 +32,26 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
     private TextView result_tv_hint;
 
 
-    private String[] page_1 = new String[]{"唱首周杰伦的歌", "打开东东教你画", "今天天气怎么样", "讲一个丑小鸭的故事", "我想听皇帝的新装的故事", "我想玩画画的游戏"};
-    private String[] page_2 = new String[]{"我想听歌", "你好联想", "世界八大奇迹是哪些", "我想听童话故事", "打开魔幻学园","我想玩动物卡片游戏"};
+    private String[] page_1 = new String[]{"唱首薛之谦的歌", "打开东东教你画", "今天天气怎么样", "讲一个小红帽的故事", "我想听灰姑娘的故事", "我想玩画画的游戏"};
+    private String[] page_2 = new String[]{"我想听歌", "你好联想", "未来三天有雨么", "我想听童话故事", "打开魔幻学园", "我想玩动物卡片游戏"};
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speek_hint);
-        StatusBarUtils.hideNavgationBar(this);
         Intent intent = getIntent();
         initViews(intent);
         initEvents();
         initDatas();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatusBarUtils.hideNavgationBar(this);
     }
 
     private void initDatas() {

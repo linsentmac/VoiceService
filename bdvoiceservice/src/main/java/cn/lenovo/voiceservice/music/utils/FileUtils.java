@@ -173,7 +173,6 @@ public class FileUtils {
 
     private static String path = Environment.getExternalStorageDirectory() + "/Music/";
 
-
     public static void copyDBToSD(Context context){
         //获取资产管理者
         AssetManager am = context.getAssets();
@@ -189,14 +188,23 @@ public class FileUtils {
             boolean isExist;
             for(String filename : files){
                 isExist = false;
-                if(filename.endsWith(".mp3")){
-                    for(String rootFileName : rootFileNames){
-                        if(rootFileName.equals(filename)){
-                            Log.d(TAG, filename + " is exist !");
-                            isExist = true;
-                            break;
+                if(filename.endsWith(".mp3")
+                        && !filename.equals("baixue.mp3")
+                        && !filename.equals("hgn.mp3")
+                        && !filename.equals("mhcdxnh.mp3")
+                        && !filename.equals("smr.mp3")
+                        && !filename.equals("xhm.mp3")){
+
+                    if(rootFileNames != null){
+                        for(String rootFileName : rootFileNames){
+                            if(rootFileName.equals(filename)){
+                                Log.d(TAG, filename + " is exist !");
+                                isExist = true;
+                                break;
+                            }
                         }
                     }
+
 
                     if(!isExist){
                         Log.d(TAG, "Copy " + filename + " to Music");
@@ -213,6 +221,7 @@ public class FileUtils {
                         fos.close();
                         scanFile(context, path + filename);
                     }
+
                 }
             }
         } catch (IOException e) {

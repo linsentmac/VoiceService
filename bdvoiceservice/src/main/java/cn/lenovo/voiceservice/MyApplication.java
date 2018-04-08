@@ -29,8 +29,6 @@ public class MyApplication extends Application {
     private static WeatherBean mWeatherBean;
     private static String mWeekWeather;
 
-    public LocationService locationService;
-    public Vibrator mVibrator;
     private static String mCity = "北京";
 
     public static boolean isLocation = false;

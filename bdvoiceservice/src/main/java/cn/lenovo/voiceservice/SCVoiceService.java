@@ -76,17 +76,14 @@ public class SCVoiceService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand ===== ");
-        if(wakeLock != null){
+        if(wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
         }
-        if(apps == null || apps.length == 0){
+        if(apps == null || apps.length == 0) {
             getInstalledApps();		//获取本机程序
         }
         startRecognition(apps);
-        //ttStoSpeech.speek("请说");
-        //mHandler.sendEmptyMessageDelayed(0, 400);
-
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -102,15 +99,6 @@ public class SCVoiceService extends Service {
             if(packageName.equals(LENOVO_HOME_PACKAGE)){
                 stopSelf();
             }
-        }
-    };
-
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
         }
     };
 
@@ -245,6 +233,7 @@ public class SCVoiceService extends Service {
 
 
                 if(t.contains("打开")){
+
                     String app=t.replace("打开", "");
                     Log.i(TAG, app);
                     String pn=appinfo.get(app.trim());
@@ -298,9 +287,7 @@ public class SCVoiceService extends Service {
                 Log.d(TAG, "onResults---:" + t +"\r\n"+ jo +"\r\n" + "使用时间"
                         + time);
 
-
             }
-
 
         }
 
