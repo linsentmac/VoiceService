@@ -66,7 +66,7 @@ public class SCVoiceService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        ttStoSpeech = new TTStoSpeech(this);
+        ttStoSpeech = TTStoSpeech.getInstance(this);
         manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         timer = new Timer(true);
         timer.schedule(task, DELAY, PERIOD);

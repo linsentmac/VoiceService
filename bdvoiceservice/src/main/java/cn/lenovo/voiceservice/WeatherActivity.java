@@ -53,11 +53,14 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
     };
 
 
+    private TTStoSpeech mTTs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         StatusBarUtils.hideNavgationBar(this);
+        mTTs = TTStoSpeech.getInstance(this);
         initViews(getIntent());
         initEvents();
 
@@ -99,6 +102,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
             reply = intent.getStringExtra("reply");
             weather_question.setText("“" + result + "?”");
             weather_answer.setText(reply);
+            mTTs.speek(reply);
             String weekWeather = MyApplication.getmWeekWeather();
             if(weekWeather != null){
                 Gson gson = new Gson();
@@ -246,5 +250,13 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
         intent.addCategory(Intent.CATEGORY_HOME);
         this.startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mTTs != null){
+            mTTs.stopTTs();
+        }
     }
 }

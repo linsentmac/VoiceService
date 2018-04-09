@@ -21,6 +21,9 @@ import cn.lenovo.voiceservice.utils.StatusBarUtils;
 public class SpeekHintActivity extends Activity implements View.OnClickListener, AnimationUtils.AnimationListener{
 
     private static final String TAG = "SC-SpeekHintActivity";
+
+    private TTStoSpeech mTTs;
+
     private ImageView mic;
 
     private ViewFlipper viewFlipper;
@@ -40,6 +43,7 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speek_hint);
+        mTTs = TTStoSpeech.getInstance(this);
         Intent intent = getIntent();
         initViews(intent);
         initEvents();
@@ -98,6 +102,7 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
                 result_tv.setText(result);
                 if(hintContent != null){
                     result_tv_hint.setText(hintContent);
+                    mTTs.speek(hintContent);
                 }else {
                     result_tv_hint.setText("暂不支持此功能");
                 }
@@ -177,5 +182,13 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         intent.addCategory(Intent.CATEGORY_HOME);
         this.startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mTTs != null){
+            mTTs.stopTTs();
+        }
     }
 }

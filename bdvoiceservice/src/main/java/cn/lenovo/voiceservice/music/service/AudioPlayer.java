@@ -42,6 +42,8 @@ public class AudioPlayer {
     private final List<OnPlayerEventListener> listeners = new ArrayList<>();
     private int state = STATE_IDLE;
 
+    private static String TAG = "SC-AudioPlayer";
+
     public static AudioPlayer get() {
         return SingletonHolder.instance;
     }
@@ -56,7 +58,7 @@ public class AudioPlayer {
     public void init(Context context) {
         this.context = context.getApplicationContext();
         musicList = DBManager.get().getMusicDao().queryBuilder().build().list();
-        Log.e("AudioPlayer", "DB musicList: " + musicList.size());
+        Log.e(TAG, "DB musicList: " + musicList.size());
         audioFocusManager = new AudioFocusManager(context);
         mediaPlayer = new MediaPlayer();
         handler = new Handler(Looper.getMainLooper());
@@ -85,8 +87,17 @@ public class AudioPlayer {
         listeners.remove(listener);
     }
 
+    public void addMusic(Music music){
+        int position = musicList.indexOf(music);
+        if (position < 0) {
+            musicList.add(music);
+            DBManager.get().getMusicDao().insert(music);
+        }
+    }
+
     public void addAndPlay(Music music) {
         int position = musicList.indexOf(music);
+        Log.d(TAG, "addAndPlay" + music.getFileName() + "/ position = " + position + " / size = " + musicList.size());
         if (position < 0) {
             musicList.add(music);
             DBManager.get().getMusicDao().insert(music);

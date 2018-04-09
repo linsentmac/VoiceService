@@ -19,8 +19,16 @@ public class TTStoSpeech implements TextToSpeech.OnInitListener{
     private TextToSpeech ttS;
 
     // xunfei "com.iflytek.speechcloud"
-    public TTStoSpeech(Context context){
+    private TTStoSpeech(Context context){
         ttS = new TextToSpeech(context, this, "com.iflytek.speechcloud");
+    }
+
+    private static TTStoSpeech mInstance;
+    public static TTStoSpeech getInstance(Context context){
+        if(mInstance == null){
+            mInstance = new TTStoSpeech(context);
+        }
+        return mInstance;
     }
 
     @Override
@@ -53,6 +61,13 @@ public class TTStoSpeech implements TextToSpeech.OnInitListener{
         if(ttS != null){
             ttS.stop();
             ttS.shutdown();
+            ttS = null;
+        }
+    }
+
+    public void stopTTs(){
+        if(ttS != null){
+            ttS.stop();
         }
     }
 

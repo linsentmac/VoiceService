@@ -108,7 +108,7 @@ public class RecordActivity extends Activity {
         initRecognition(apps);
 
         okHttpClient = new OkHttpClient();
-        ttStoSpeech = new TTStoSpeech(this);
+        ttStoSpeech = TTStoSpeech.getInstance(this);
         manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         timer = new Timer(true);
         timer.schedule(task, DELAY, PERIOD);
@@ -542,13 +542,13 @@ public class RecordActivity extends Activity {
             } else if(domain.equals("音乐")) {
                 displayMusicInfo(recognizeResult, result);
             } else if(domain.equals("关于")) {
-                ttStoSpeech.speek(reply);
+                //ttStoSpeech.speek(reply);
                 startHintActivity(false, recognizeResult, reply, null, null);
             } else if(domain.equals("计算器")){
-                ttStoSpeech.speek(reply);
+                //ttStoSpeech.speek(reply);
                 startHintActivity(false, recognizeResult, reply,null, null);
             } else if(domain.equals("日历")){
-                ttStoSpeech.speek(reply);
+                //ttStoSpeech.speek(reply);
                 startHintActivity(false, recognizeResult, reply,null, null);
             } else {
                 if(recognizeResult.contains("故事")){
@@ -595,7 +595,7 @@ public class RecordActivity extends Activity {
         //intent.putExtra("weekWeather", weekWeather);
         startActivity(intent);
 
-        ttStoSpeech.speek(reply);
+        //ttStoSpeech.speek(reply);
     }
 
     /**
@@ -727,6 +727,9 @@ public class RecordActivity extends Activity {
                             startHintActivity(false, result, "本地没有歌曲", null, null);
                             return;
                         }
+                        /*for(Music music : musicList){
+                            AudioPlayer.get().addAndPlay(music);
+                        }*/
                         switch (type){
                             case 0:
                                 Random random = new Random();
