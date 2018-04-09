@@ -55,6 +55,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private boolean isDraggingProgress;
 
     private Music recoMusic;
+    private String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         //从语音识别界面传过来的要播放的歌曲
         recoMusic = (Music) getIntent().getSerializableExtra("music");
+        result = getIntent().getStringExtra("result");
         initView();
         addListener();
         initPlayer();
@@ -87,6 +89,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         mSeekBar = findViewById(R.id.mSeekBar);
         mGifDrawable = (GifDrawable) pl_gifView.getDrawable();
         mGifDrawable.stop();
+        tv_reco_title.setText("“" + result + "”");
     }
 
     private void addListener() {

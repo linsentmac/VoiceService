@@ -193,7 +193,9 @@ public class FileUtils {
                         && !filename.equals("hgn.mp3")
                         && !filename.equals("mhcdxnh.mp3")
                         && !filename.equals("smr.mp3")
-                        && !filename.equals("xhm.mp3")){
+                        && !filename.equals("xhm.mp3")
+                        && !filename.equals("bearcategory.mp3")
+                        && !filename.equals("beartype.mp3")){
 
                     if(rootFileNames != null){
                         for(String rootFileName : rootFileNames){

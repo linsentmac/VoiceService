@@ -309,7 +309,8 @@ public class StoryLrcActivity extends Activity implements View.OnClickListener, 
                         tv_currentTime.setText(formatTime(time));
 
                         int imageIndex = time * dstImage.length /duration;
-                        if(imageIndex != currentImgIndex){
+                        if(imageIndex != currentImgIndex
+                                && imageIndex < dstImage.length){
                             Drawable drawable = getResources().getDrawable(dstImage[imageIndex]);
                             iv_picture.setImageDrawable(drawable);
                             currentImgIndex = imageIndex;

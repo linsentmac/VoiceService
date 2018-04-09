@@ -59,6 +59,7 @@ import cn.lenovo.voiceservice.music.utils.MusicUtils;
 import cn.lenovo.voiceservice.music.utils.PermissionReq;
 import cn.lenovo.voiceservice.music.utils.ToastUtils;
 import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
+import cn.lenovo.voiceservice.story.BearActivity;
 import cn.lenovo.voiceservice.story.StoryLrcActivity;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
 import cn.lenovo.voiceservice.view.SeismicWave;
@@ -305,6 +306,18 @@ public class RecordActivity extends Activity {
 
                 if(t.contains("我想玩动物卡片游戏")){
                     openApp(t, "魔幻学园");
+                    return;
+                }
+
+                if(t.contains("世界上")
+                        && t.contains("多少种熊")){
+                    startBearActivity(0);
+                    return;
+                }
+
+                if(t.contains("熊大")
+                        && t.contains("熊二")){
+                    startBearActivity(1);
                     return;
                 }
 
@@ -657,7 +670,7 @@ public class RecordActivity extends Activity {
                         startHintActivity(false, recognizeResult, null, null, null);
                     }
                 } else if(domain.equals("新闻")
-                        && recognizeResult.contains("讲个故事")){
+                        && recognizeResult.contains("故事")){
                     // 随机
                     startStoryActivity(recognizeResult, 0, null);
                 } else {
@@ -678,6 +691,13 @@ public class RecordActivity extends Activity {
         storyIntent.putExtra("storyType", type);
         storyIntent.putExtra("storyName", name);
         startActivity(storyIntent);
+    }
+
+    private void startBearActivity(int bearType){
+        Log.e(TAG, "startBearActivity: " + bearType);
+        Intent bearIntent = new Intent(this, BearActivity.class);
+        bearIntent.putExtra("bearType", bearType);
+        startActivity(bearIntent);
     }
 
     private void playMusic(int type, String musicName, String result) {
@@ -713,6 +733,7 @@ public class RecordActivity extends Activity {
                                 //找到了
                                 Intent randomIntent = new Intent(RecordActivity.this, MusicActivity.class);
                                 randomIntent.putExtra("music", musicList.get(random.nextInt(musicList.size())));
+                                randomIntent.putExtra("result", result);
                                 startActivity(randomIntent);
                                 break;
 
@@ -723,6 +744,7 @@ public class RecordActivity extends Activity {
                                         //找到了
                                         Intent intent = new Intent(RecordActivity.this, MusicActivity.class);
                                         intent.putExtra("music", musicList.get(i));
+                                        intent.putExtra("result", result);
                                         startActivity(intent);
                                         break;
                                     }
@@ -739,11 +761,12 @@ public class RecordActivity extends Activity {
                                         //找到了
                                         Intent intent = new Intent(RecordActivity.this, MusicActivity.class);
                                         intent.putExtra("music", musicList.get(i));
+                                        intent.putExtra("result", result);
                                         startActivity(intent);
                                         break;
                                     }
                                     if (i == musicList.size() - 1) {
-                                        startHintActivity(false, result, "找不到此歌曲", null, null);
+                                        startHintActivity(false, result, "没有这首歌哦", null, null);
                                     }
                                 }
                                 break;
@@ -949,16 +972,20 @@ public class RecordActivity extends Activity {
     }
 
     private void release() {
-        stopRecognition();
-        if (ttStoSpeech != null) {
-            ttStoSpeech.releaseTTS();
-        }
-        if (timer != null) {
-            timer.purge();
-            timer.cancel();
-        }
-        if(mVoiceReceiver != null){
-            unregisterReceiver(mVoiceReceiver);
+        try {
+            stopRecognition();
+            if (ttStoSpeech != null) {
+                ttStoSpeech.releaseTTS();
+            }
+            if (timer != null) {
+                timer.purge();
+                timer.cancel();
+            }
+            if(mVoiceReceiver != null){
+                unregisterReceiver(mVoiceReceiver);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

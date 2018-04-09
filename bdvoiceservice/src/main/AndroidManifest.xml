@@ -94,7 +94,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <!-- AK鉴权 -->
         <!-- meta-data需要写在application中 -->
@@ -125,7 +125,8 @@
         <service android:name=".music.service.PlayService" />
 
         <activity android:name=".story.StoryActivity" />
-        <activity android:name=".story.StoryLrcActivity"/>
+        <activity android:name=".story.StoryLrcActivity" />
+        <activity android:name=".story.BearActivity"></activity>
     </application>
 
 </manifest>
