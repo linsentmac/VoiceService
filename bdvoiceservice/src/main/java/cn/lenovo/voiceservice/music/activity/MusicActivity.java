@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -38,7 +39,7 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by chao on 2018/4/1.
  */
 public class MusicActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, OnPlayerEventListener {
-    public static final String TAG = "MusicActivity";
+    public static final String TAG = "SC-MusicActivity";
     private Context mContext = MusicActivity.this;
 
     private TextView tv_reco_title, tv_song_name, tv_singer_name, tv_play_time, tv_total_time;
@@ -61,14 +62,28 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
-        StatusBarUtils.hideNavgationBar(this);
-
+        wakeUp();
         //从语音识别界面传过来的要播放的歌曲
         recoMusic = (Music) getIntent().getSerializableExtra("music");
         result = getIntent().getStringExtra("result");
         initView();
         addListener();
         initPlayer();
+    }
+
+    private PowerManager.WakeLock wakeLock;
+    private final String MUSIC_WAKE_TAG = "SCMusic";
+    private void wakeUp() {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
+                | PowerManager.ON_AFTER_RELEASE, MUSIC_WAKE_TAG);
+        wakeLock.acquire();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatusBarUtils.hideNavgationBar(this);
     }
 
     private void initView() {
@@ -275,10 +290,14 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "music onDestory .... ");
         if (serviceConnection != null) {
             unbindService(serviceConnection);
         }
         AudioPlayer.get().removeOnPlayEventListener(this);
+        if(wakeLock != null){
+            wakeLock.release();
+        }
         super.onDestroy();
     }
 }
