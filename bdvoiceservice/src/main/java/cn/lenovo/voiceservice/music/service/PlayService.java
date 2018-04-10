@@ -15,7 +15,7 @@ import cn.lenovo.voiceservice.music.constants.Actions;
  * Created by chao on 2018/4/1.
  */
 public class PlayService extends Service {
-    private static final String TAG = "Service";
+    private static final String TAG = "SC-PlayService";
 
     public class PlayBinder extends Binder {
         public PlayService getService() {

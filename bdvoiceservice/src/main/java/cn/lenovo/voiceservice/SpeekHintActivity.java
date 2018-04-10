@@ -48,8 +48,6 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         initViews(intent);
         initEvents();
         initDatas();
-
-
     }
 
     @Override
@@ -105,6 +103,7 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
                     mTTs.speek(hintContent);
                 }else {
                     result_tv_hint.setText("暂不支持此功能");
+                    mTTs.speek("我不太明白主人的意思呀");
                 }
             }
         }

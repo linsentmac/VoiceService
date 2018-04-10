@@ -20,6 +20,8 @@ public class TTStoSpeech implements TextToSpeech.OnInitListener{
 
     // xunfei "com.iflytek.speechcloud"
     private TTStoSpeech(Context context){
+        mContext = context;
+        Log.d(TAG, "new TTStoSpeech ... ");
         ttS = new TextToSpeech(context, this, "com.iflytek.speechcloud");
     }
 
@@ -53,20 +55,27 @@ public class TTStoSpeech implements TextToSpeech.OnInitListener{
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, UUID.randomUUID()
                 .toString());
         // String str = "你好啊，hello 我是TTS";
-        ttS.setLanguage(Locale.CHINA);
-        ttS.speak(voice, TextToSpeech.QUEUE_FLUSH, map);
+        if(ttS == null){
+            ttS = new TextToSpeech(mContext, this, "com.iflytek.speechcloud");
+        }else {
+            ttS.setLanguage(Locale.CHINA);
+            ttS.speak(voice, TextToSpeech.QUEUE_FLUSH, map);
+        }
     }
 
     public void releaseTTS(){
         if(ttS != null){
+            Log.d(TAG, "releaseTTS");
             ttS.stop();
             ttS.shutdown();
             ttS = null;
         }
+        mInstance = null;
     }
 
     public void stopTTs(){
         if(ttS != null){
+            Log.d(TAG, "stopTTs");
             ttS.stop();
         }
     }

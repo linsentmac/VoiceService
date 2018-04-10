@@ -213,6 +213,7 @@ public class AudioPlayer {
         for (OnPlayerEventListener listener : listeners) {
             listener.onPlayerPause();
         }
+        Log.d(TAG, "pausePlayer");
     }
 
     public void stopPlayer() {

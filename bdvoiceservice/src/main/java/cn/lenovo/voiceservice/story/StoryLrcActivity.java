@@ -330,9 +330,11 @@ public class StoryLrcActivity extends Activity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         //handler.removeCallbacks(runnable);
-        mediaPlayer.reset();
-        mediaPlayer.release();
-        mediaPlayer = null;
+        if(mediaPlayer != null){
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         if(task != null){
             task.cancel();
             task = null;

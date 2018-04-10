@@ -11,8 +11,12 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,6 +63,7 @@ import cn.lenovo.voiceservice.music.utils.MusicUtils;
 import cn.lenovo.voiceservice.music.utils.PermissionReq;
 import cn.lenovo.voiceservice.music.utils.ToastUtils;
 import cn.lenovo.voiceservice.receiver.VoiceBroadCastReceiver;
+import cn.lenovo.voiceservice.service.WakeUpService;
 import cn.lenovo.voiceservice.story.BearActivity;
 import cn.lenovo.voiceservice.story.StoryLrcActivity;
 import cn.lenovo.voiceservice.utils.StatusBarUtils;
@@ -142,6 +147,7 @@ public class RecordActivity extends Activity {
             wakeLock.release();
             wakeLock = null;
         }
+        //playStartSound();
         if (apps == null || apps.length == 0) {
             getInstalledApps();        //获取本机程序
         }
@@ -172,9 +178,9 @@ public class RecordActivity extends Activity {
         r = SpeechRecognizer.createSpeechRecognizer(this, com);
         r.setRecognitionListener(mReListener);
         recognizerIntent = new Intent();
-        recognizerIntent.putExtra(Constant.EXTRA_SOUND_START, R.raw.bdspeech_recognition_start);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_START, R.raw.bdspeech_recognition_success);
         recognizerIntent.putExtra(Constant.EXTRA_SOUND_END, R.raw.bdspeech_speech_end);
-        recognizerIntent.putExtra(Constant.EXTRA_SOUND_SUCCESS, R.raw.bdspeech_recognition_success);
+        recognizerIntent.putExtra(Constant.EXTRA_SOUND_SUCCESS, R.raw.bdspeech_recognition_start);
         recognizerIntent.putExtra(Constant.EXTRA_SOUND_ERROR, R.raw.bdspeech_recognition_error);
         recognizerIntent.putExtra(Constant.EXTRA_SOUND_CANCEL, R.raw.bdspeech_recognition_cancel);
 
@@ -321,6 +327,23 @@ public class RecordActivity extends Activity {
                     return;
                 }
 
+                if(t.contains("启动休眠")){
+                    /*Intent wakeUpIntent = new Intent(RecordActivity.this, WakeUpService.class);
+                    stopService(wakeUpIntent);*/
+                    Intent intent = new Intent("android.intent.action.DORMANT_ON");
+                    sendBroadcast(intent);
+                    startHintActivity(false, t, "已帮你启动休眠模式", null, null);
+                    return;
+                }
+
+                if(t.contains("关闭休眠")){
+                    /*Intent wakeUpIntent = new Intent(RecordActivity.this, WakeUpService.class);
+                    startService(wakeUpIntent);*/
+                    Intent intent = new Intent("android.intent.action.DORMANT_OFF");
+                    sendBroadcast(intent);
+                    startHintActivity(false, t, "已帮你关闭休眠模式", null, null);
+                    return;
+                }
 
                 if (t.contains("打开")) {
 
@@ -522,6 +545,21 @@ public class RecordActivity extends Activity {
 
         }
     };
+
+    private void playStartSound(){
+        Uri soundUri = Uri.parse("file://" + "system/media/audio/notifications/Argon.ogg");
+        if (soundUri != null) {
+            final Ringtone sfx = RingtoneManager.getRingtone(this, soundUri);
+            if (sfx != null) {
+                sfx.setStreamType(AudioManager.STREAM_SYSTEM);
+                sfx.play();
+            } else {
+                Log.d(TAG, "playSounds: failed to load ringtone from uri: " + soundUri);
+            }
+        } else {
+            Log.d(TAG, "playSounds: could not parse Uri: ");
+        }
+    }
 
     /**
      * 对于NLP的内容进行分类解析
@@ -963,6 +1001,10 @@ public class RecordActivity extends Activity {
             Log.d(TAG, "onPause stop gif Animation");
             gifDrawable.stop();
         }
+
+        /*if(r != null){
+            r.stopListening();
+        }*/
     }
 
     @Override
