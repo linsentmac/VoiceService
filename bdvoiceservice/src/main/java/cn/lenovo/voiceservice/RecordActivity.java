@@ -723,13 +723,11 @@ public class RecordActivity extends Activity {
                         AppCache.get().getLocalMusicList().clear();
                         AppCache.get().getLocalMusicList().addAll(musicList);
                         AudioPlayer.get().setMusicList(musicList);
+                        MyApplication.setMusicList(musicList);
                         if(musicList.size() == 0){
                             startHintActivity(false, result, "本地没有歌曲", null, null);
                             return;
                         }
-                        /*for(Music music : musicList){
-                            AudioPlayer.get().addAndPlay(music);
-                        }*/
                         switch (type){
                             case 0:
                                 Random random = new Random();

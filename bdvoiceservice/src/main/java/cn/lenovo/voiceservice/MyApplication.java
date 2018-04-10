@@ -13,9 +13,13 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.lenovo.voiceservice.jsonbean.WeatherBean;
 import cn.lenovo.voiceservice.location.LocationManager;
 import cn.lenovo.voiceservice.location.LocationService;
+import cn.lenovo.voiceservice.music.model.Music;
 import cn.lenovo.voiceservice.music.utils.FileUtils;
 
 
@@ -74,5 +78,14 @@ public class MyApplication extends Application {
     }
 
 
+    private static List<Music> musicList;
+    public static void setMusicList(List<Music> list){
+        musicList = new ArrayList<>();
+        musicList = list;
+    }
+
+    public static List<Music> getMusicList(){
+        return musicList;
+    }
 
 }

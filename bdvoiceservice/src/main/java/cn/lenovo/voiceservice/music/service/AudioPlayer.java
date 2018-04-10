@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import cn.lenovo.voiceservice.MyApplication;
 import cn.lenovo.voiceservice.music.db.DBManager;
 import cn.lenovo.voiceservice.music.enums.PlayModeEnum;
 import cn.lenovo.voiceservice.music.model.Music;
@@ -38,7 +39,7 @@ public class AudioPlayer {
     private Handler handler;
     private NoisyAudioStreamReceiver noisyReceiver;
     private IntentFilter noisyFilter;
-    private List<Music> musicList;
+    private List<Music> musicList = new ArrayList<>();
     private final List<OnPlayerEventListener> listeners = new ArrayList<>();
     private int state = STATE_IDLE;
 
@@ -59,6 +60,7 @@ public class AudioPlayer {
         this.context = context.getApplicationContext();
         musicList = DBManager.get().getMusicDao().queryBuilder().build().list();
         Log.e(TAG, "DB musicList: " + musicList.size());
+        addMusicToDB();
         audioFocusManager = new AudioFocusManager(context);
         mediaPlayer = new MediaPlayer();
         handler = new Handler(Looper.getMainLooper());
@@ -87,11 +89,16 @@ public class AudioPlayer {
         listeners.remove(listener);
     }
 
-    public void addMusic(Music music){
-        int position = musicList.indexOf(music);
-        if (position < 0) {
-            musicList.add(music);
-            DBManager.get().getMusicDao().insert(music);
+    public void addMusicToDB(){
+        List<Music> list = MyApplication.getMusicList();
+        for(Music music : list){
+            int position = musicList.indexOf(music);
+            Log.d(TAG, "addMusic position = " + position);
+            if (position < 0) {
+                Log.d(TAG, "addMusic");
+                musicList.add(music);
+                DBManager.get().getMusicDao().insert(music);
+            }
         }
     }
 
