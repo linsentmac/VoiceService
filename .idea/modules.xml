@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartCastVoice.iml" filepath="$PROJECT_DIR$/SmartCastVoice.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/levoice/levoice.iml" filepath="$PROJECT_DIR$/levoice/levoice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bdvoiceservice/bdvoiceservice.iml" filepath="$PROJECT_DIR$/bdvoiceservice/bdvoiceservice.iml" />
     </modules>
   </component>
 </project>
