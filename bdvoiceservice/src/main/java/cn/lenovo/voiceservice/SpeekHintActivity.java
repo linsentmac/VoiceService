@@ -39,6 +39,8 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
     private String[] page_2 = new String[]{"我想听歌", "你好联想", "未来三天有雨么", "我想听童话故事", "打开魔幻学园", "我想玩动物卡片游戏"};
 
 
+    private boolean openApp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,7 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
         result_layout = findViewById(R.id.result_layout);
         result_tv = findViewById(R.id.result_tv);
         result_tv_hint = findViewById(R.id.result_tv_hint);
-        boolean openApp = intent.getBooleanExtra("openApp", false);
+        openApp = intent.getBooleanExtra("openApp", false);
         boolean isResult = intent.getBooleanExtra("isResult", false);
         String result = intent.getStringExtra("Result");
         String pkgName = intent.getStringExtra("pkgName");
@@ -186,8 +188,15 @@ public class SpeekHintActivity extends Activity implements View.OnClickListener,
     @Override
     protected void onPause() {
         super.onPause();
-        if(mTTs != null){
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mTTs != null
+                && !openApp){
             mTTs.stopTTs();
         }
     }
+
 }

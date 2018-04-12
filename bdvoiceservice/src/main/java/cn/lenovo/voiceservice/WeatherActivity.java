@@ -255,6 +255,13 @@ public class WeatherActivity extends Activity implements View.OnClickListener, A
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestory");
         if(mTTs != null){
             mTTs.stopTTs();
         }

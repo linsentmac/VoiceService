@@ -74,7 +74,8 @@ public class TTStoSpeech implements TextToSpeech.OnInitListener{
     }
 
     public void stopTTs(){
-        if(ttS != null){
+        if(ttS != null
+                && ttS.isSpeaking()){
             Log.d(TAG, "stopTTs");
             ttS.stop();
         }

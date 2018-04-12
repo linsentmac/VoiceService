@@ -149,6 +149,9 @@ public class RecordActivity extends Activity {
         super.onResume();
         StatusBarUtils.hideNavgationBar(this);
         initViews();
+        if(ttStoSpeech != null){
+            ttStoSpeech.stopTTs();
+        }
         if (wakeLock != null) {
             wakeLock.release();
             wakeLock = null;
