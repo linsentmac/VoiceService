@@ -177,6 +177,10 @@ public class RecordActivity extends Activity {
 
     private Intent _Intent;
     private KeyEvent _KeyEvent;
+
+    /**
+     * stop Local Music
+     */
     private void stopLocalMusicPlay(){
         _Intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         //KeyEvent(action,keycode)
