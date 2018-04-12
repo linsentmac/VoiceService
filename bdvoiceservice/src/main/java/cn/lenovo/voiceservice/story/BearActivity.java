@@ -58,7 +58,7 @@ public class BearActivity extends Activity {
             iv_picture.setImageResource(R.mipmap.bear_category);
         }else if (bearType == 1){
             tv_question.setText("熊大熊二是什么熊？");
-            tv_answer.setText("熊大熊二是卡通动物，生物特诊更接近亚洲黑熊。他们还会说人话，会直立行走，是光头强的死对头。");
+            tv_answer.setText("熊大熊二是卡通动物，生物特征更接近亚洲黑熊。他们还会说人话，会直立行走，是光头强的死对头。");
             iv_picture.setImageResource(R.mipmap.bear_type);
         }
     }

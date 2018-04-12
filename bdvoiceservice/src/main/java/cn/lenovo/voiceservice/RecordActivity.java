@@ -28,6 +28,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -169,7 +170,31 @@ public class RecordActivity extends Activity {
                 LocationManager.getInstance(this);
             }
         }
+        stopLocalMusicPlay();
         startRecognition(apps);
+    }
+
+
+    private Intent _Intent;
+    private KeyEvent _KeyEvent;
+    private void stopLocalMusicPlay(){
+        _Intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        //KeyEvent(action,keycode)
+        _KeyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
+        _Intent.putExtra(Intent.EXTRA_KEY_EVENT, _KeyEvent);
+        sendBroadcast(_Intent);
+
+        //模拟按键触发
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        _KeyEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
+        _Intent.putExtra(Intent.EXTRA_KEY_EVENT, _KeyEvent);
+        sendBroadcast(_Intent);
+        Log.d(TAG, "stopMusic");
     }
 
     private EventManager mWpEventManager;
@@ -583,7 +608,7 @@ public class RecordActivity extends Activity {
                 gifDrawable.stop();
                 gifImageView.setImageResource(R.mipmap.loading);
                 gifDrawable = (GifDrawable) gifImageView.getDrawable();
-                gifDrawable.setLoopCount(4);
+                gifDrawable.setLoopCount(14);
                 gifDrawable.start();
             }
         }
