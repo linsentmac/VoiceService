@@ -370,7 +370,8 @@ public class RecordActivity extends Activity {
                     sendBroadcast(broadcastIntent);
                 }
 
-                if (t.contains("打开投影")) {
+                if (t.contains("打开")
+                        && t.contains("投影")) {
                     //wakeUp();
                     Intent intent = new Intent("android.intent.action.ACTION_PICO_ON");
                     sendBroadcast(intent);
@@ -378,7 +379,8 @@ public class RecordActivity extends Activity {
                     return;
                 }
 
-                if (t.contains("关闭投影")) {
+                if (t.contains("关闭")
+                        && t.contains("投影")) {
                     Intent intent = new Intent("android.intent.action.ACTION_PICO_OFF");
                     sendBroadcast(intent);
                     finish();
@@ -392,7 +394,8 @@ public class RecordActivity extends Activity {
                 }
 
                 if(t.contains("我想画画")
-                        || t.contains("我想玩画画的游戏")){
+                        || t.contains("我想玩画画的游戏")
+                        || t.contains("画画")){
                     openApp(t, "东东教你画");
                     return;
                 }
