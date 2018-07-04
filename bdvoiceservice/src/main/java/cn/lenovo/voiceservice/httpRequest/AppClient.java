@@ -36,7 +36,7 @@ public class AppClient {
 
     private static final String TAG = "SC-AppClient";
     static Retrofit mRetrofit;
-    public static final String commonUrl = "http://awareness.lenovo.com.cn/nlu/?";
+    public static final String commonUrl = "https://awareness.lenovo.com/nlu/?";
 
     public static Retrofit retrofit(String url) {
         Log.d(TAG, "url = " + url + "\n" + "mRetrofit = " + mRetrofit);
